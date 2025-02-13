@@ -36,6 +36,10 @@ function check_extensions()
 
     if (!empty($not_loaded))
     {
+        $version = phpversion();
+        echo "<pre>";
+        print_r($version);
+        echo "</pre>";
         show("Please ensure that the following PHP extensions are installed and loaded: <br>" . implode("<br>", $not_loaded));
         die;
     }
