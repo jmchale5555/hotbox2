@@ -8,8 +8,8 @@
         rooms: <?php echo htmlspecialchars($rooms) ?>,
     }">
 
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <div class="relative overflow-x-auto shadow-md rounded-lg">
+        <table class="table w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-12 ">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
@@ -21,15 +21,18 @@
                     <th scope="col" class="px-6 py-3">
                         Date added
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="col-span-2 px-6 py-3">
                         Actions
+                    </th>
+                    <th scope="col" class="col-span-2 px-6 py-3">
+                        
                     </th>
                 </tr>
             </thead>
             <template x-for="room in rooms" :key="room.id">
-                <tbody>
+                <tbody class="even:bg-gray-50 odd:bg-gray-300 even:dark:bg-slate-700 odd:dark:bg-slate-800 border-gray-200 dark:border-gray-700">
 
-                    <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                    <tr class="table-row rounded-lg">
                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" x-text="room.id">
                         </td>
                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" x-text="room.room_name">
@@ -44,14 +47,12 @@
                             <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a>
                         </td>
                     </tr>
-
-
+                </tbody>
+            </template>
+        </table>
 
     </div>
 
-    </tbody>
-    </table>
-    </template>
 </div>
 
 
