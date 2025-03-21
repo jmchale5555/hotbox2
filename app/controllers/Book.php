@@ -49,7 +49,7 @@ class Book
     {
         $roomId = $room_id;
         $desks = new Desk;
-        // $selectedDesks = $desks->where(['room_id' => $roomId]);
+        // 3 params of the where method are equal to, less than and greater than
         $selectedDesks = $desks->where(['room_id' => $roomId], [], []);
 
         echo json_encode($selectedDesks);
@@ -59,10 +59,9 @@ class Book
     {
         $roomId = $room_id;
         $bookings = new Booking();
-        // $selectedBookings = $bookings->where(['room_id' => $roomId]);
+        // The 3 params of the where method are equal to, less then and greater than
         $now = time() - 86400;
         $selectedBookings = $bookings->where(['room_id' => $roomId], [], ['res_date' => $now]);
-        // $selectedBookings['res_date'] = getDate($selectedBookings['res_date']);
 
         echo json_encode($selectedBookings);
     }
@@ -75,7 +74,6 @@ class Book
 
         // Get the JSON contents from form submission
         $data = json_decode(file_get_contents('php://input'), true);
-        // $data['res_date'] = strtotime($data['res_date']);
         $data['user_id'] = $_SESSION['USER']->id;
         $data['user_name'] = $_SESSION['USER']->name;
 
