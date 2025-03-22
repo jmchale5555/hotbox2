@@ -98,4 +98,13 @@ class Book
 
         echo json_encode($booking->errors);
     }
+
+    public function getNumberOfDesks($roomId)
+    {
+        $desks = new Desk;
+        $selectedDesks = $desks->where(['room_id' => $roomId], [], []);
+        $totalDesks = count($selectedDesks, COUNT_RECURSIVE);
+        echo json_encode($totalDesks);
+    }
+
 }
