@@ -55,7 +55,7 @@
                     </th>
                 </tr>
             </thead>
-            <template x-for="room in rooms" :key="room.id">
+            <template x-for="room in rooms.filter((_, index) => index > 0)" :key="room.id">
                 <tbody class="even:bg-gray-50 odd:bg-gray-300 even:dark:bg-slate-700 odd:dark:bg-slate-800 border-gray-200 dark:border-gray-700">
 
                     <tr class="table-row rounded-lg">
@@ -93,7 +93,7 @@
                   </h3>
                   <button type="button" 
                           @click="selectedRoom = null"
-                          class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                          class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
                       <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                       </svg>
@@ -127,8 +127,8 @@
               </template>
           </div>
       </div>
-    </div>
   </div>
+  <!-- </div> -->
 
 
 <?php include 'partials/footer.view.php' ?>
