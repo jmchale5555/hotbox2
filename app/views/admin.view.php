@@ -129,6 +129,123 @@
       </div>
   </div>
   <!-- </div> -->
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('adminForm', () => ({
+            formData: {
+                room_id: "",
+                total_desks: "",
+            },
+            errors: {},
+            message: '',
+            hasError: false,
+            isSubmitting: false,
+            showDeleteModal: false,
+            roomToDelete: null,
+
+            openDeleteModal(bookingId) {
+                this.bookingToDelete = bookingId;
+                this.showDeleteModal = true;
+            },
+
+            async confirmDelete() {
+                try {
+                    await this.deleteRoom(this.roomToDelete);
+                    this.showDeleteModal = false;
+                    this.roomToDelete = null;
+                    this.message = 'Room Deleted successfully!';
+                    this.hasError = false;
+
+                    // Refresh the bookings data after successful deletion
+                    if (this.selectedRoomId) {
+                        await this.getBookings(this.selectedRoomId);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    this.message = 'An error occurred while deleting the room.';
+                    this.hasError = true;
+                }
+            },
+
+            async deleteRoom(roomId) {
+                const response = await fetch(`admin/deleteRoomById/${roomId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to delete room');
+                }
+                const result = await response.json();
+
+                // Use the room_id from formData to fetch updated list of rooms
+                if (this.formData.room_id) {
+                    this.$dispatch('refresh-room-data', {
+                        roomId: this.formData.room_id,
+                    });
+                }
+
+                // Immediately update local state for UI responsiveness
+                if (Array.isArray(this.rooms)) {
+                    this.rooms = this.rooms.filter(room => room.id !== roomId);
+                }
+
+                // Fetch fresh data using getBookings
+                return result;
+            },
+
+            async submitForm() {
+                this.isSubmitting = true;
+                this.errors = {};
+                this.message = '';
+                if (!this.formData.res_date) {
+                    this.hasError = true;
+                    this.message = 'Please select a date';
+                    this.isSubmitting = false;
+                    return;
+                }
+                try {
+                    const response = await fetch('admin/store', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // Add CSRF token if needed
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                        },
+                        body: JSON.stringify(this.formData)
+                    });
+
+                    const result = await response.json();
+
+                    if (!response.ok) {
+                        if (result.errors) {
+                            this.errors = result.errors;
+                        }
+                        this.hasError = true;
+                        this.message = result.message || 'An error occurred';
+                        return;
+                    }
+
+                    // Use the room_id from formData to fetch updated bookings
+                    if (this.formData.room_id) {
+                        this.$dispatch('refresh-room-data', {
+                            roomId: this.formData.room_id,
+                        });
+                    }
+
+                    this.hasError = false;
+                    this.message = 'Room saved successfully!';
+
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    this.hasError = true;
+                    this.message = 'An error occurred while saving the booking.';
+                } finally {
+                    this.isSubmitting = false;
+                }
+            },
+
+        }));
+    });
+</script>
+
 
 
 <?php include 'partials/footer.view.php' ?>

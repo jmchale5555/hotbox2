@@ -35,4 +35,13 @@ class Admin
 
         $this->view('admin', $data);
     }
+
+  public function deleteRoomById($roomId)
+  {
+        $room = new Room;
+
+        $room->delete($roomId);
+
+        echo json_encode($room->errors);
+  }
 }
