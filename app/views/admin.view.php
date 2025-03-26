@@ -14,23 +14,27 @@
         
         // Fetch the number of Desks
             try {
-                const response = await fetch(`book/getNumberOfDesks/${room.id}`);
-                this.selectedRoom.deskCount = await response.json();
+                const response = await fetch(`book/getDeskByRoomId/${room.id}`);
+                if(response.status !== 200)
+                {
+                  console.log(response);
+                }
+                else
+                {
+                   this.selectedRoom.desks = await response.json();
+                   this.selectedRoom.deskCount = (this.selectedRoom.desks.length - 1);
+                }
+ 
             }  catch (error) {
                 console.error('Error fetching desk total:', error);
-                    //this.message = 'Error refreshing booking data';
-                    // this.hasError = true;
                 this.selectedRoom.deskCount = null;
                 // Reset to null on error
-                this.selectRoom = null;
+                this.selectedRoom = null;
                 }
     },
     
-    updateRoom() {
-        // Add your room update logic here
-        
-        // After successful update, close the modal
-        this.selectedRoom = null;
+    async updateRoom(input) {
+      //nothing
     },
     }">
 
@@ -94,7 +98,7 @@
                   <button type="button" 
                           @click="selectedRoom = null"
                           class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
-                      <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                      <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                       </svg>
                       <span class="sr-only">Close</span>
@@ -103,7 +107,7 @@
               
               <!-- Form only rendered when selectedRoom is not null -->
               <template x-if="selectedRoom">
-                  <form class="p-4 md:p-5" @submit.prevent="">
+                  <form class="p-4 md:p-5" @submit.prevent="submitForm()">
                       <div class="grid gap-4 mb-4 grid-cols-2">
                           <div class="col-span-2">
                               <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
@@ -135,6 +139,7 @@
             formData: {
                 room_id: "",
                 total_desks: "",
+                req_desks: "",
             },
             errors: {},
             message: '',

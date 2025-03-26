@@ -47,10 +47,15 @@ class Book
 
     public function getDeskByRoomId($room_id)
     {
+        $selectedDesks = [];
         $roomId = $room_id;
-        $desks = new Desk;
+        $rooms = new Room;
+        $selectedRoom = $rooms->where(['id' => $roomId], [], []);
         // 3 params of the where method are equal to, less than and greater than
-        $selectedDesks = $desks->where(['room_id' => $roomId], [], []);
+        for( $i = 1; $i <= $selectedRoom[desk_total]; $i++) {
+          array_push($selectedDesks, $i);
+        }
+        
 
         echo json_encode($selectedDesks);
     }

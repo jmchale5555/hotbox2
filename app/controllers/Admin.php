@@ -5,8 +5,9 @@ namespace Controller;
 defined('ROOTPATH') or exit('Access Denied!');
 
 use Model\Room;
-use \Core\Pager;
-use \Model\User;
+use Model\Desk;
+//use \Core\Pager;
+//use \Model\User;
 use \Core\Session;
 
 /**
@@ -30,8 +31,8 @@ class Admin
         $avilableRooms = $rooms->all();
         $data['rooms'] = json_encode($avilableRooms);
         $data['name'] = empty($_SESSION['USER']) ? 'guest user' : $_SESSION['USER']->name;
-        $user = new user;
-        $data['row'] = $row = $user->first(['id' => $_SESSION["USER"]->id]);
+        //$user = new user;
+        //$data['row'] = $row = $user->first(['id' => $_SESSION["USER"]->id]);
 
         $this->view('admin', $data);
     }
@@ -39,9 +40,15 @@ class Admin
   public function deleteRoomById($roomId)
   {
         $room = new Room;
-
         $room->delete($roomId);
-
         echo json_encode($room->errors);
+  }
+
+  public function amendDesks() 
+  {
+    $desk = new Desk;
+    $data = [];
+    $data = json_decode(file_get_contents('php://input'), true);
+    
   }
 }

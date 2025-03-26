@@ -40,7 +40,11 @@
 
         async getDesks(roomId) {
             const response = await fetch(`book/getDeskByRoomId/${roomId}`);
-            this.desks = await response.json();
+            if (response.status !== 200) {
+              (response) => console.log(response);
+            } else {
+              this.desks = await response.json();
+            }
             if (this.desks.length > 0) {
                 this.selectedDeskId = this.desks[0].id;
             } else {

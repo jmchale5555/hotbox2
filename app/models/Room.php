@@ -18,6 +18,7 @@ class Room
     protected $allowedColumns = [
         'id',
         'room_name',
+        'desk_total',
 
     ];
 }
