@@ -40,6 +40,7 @@
 
         async getDesks(roomId) {
             const response = await fetch(`book/getDeskByRoomId/${roomId}`);
+            //console.log(response.json());
             if (response.status !== 200) {
               (response) => console.log(response);
             } else {
@@ -145,8 +146,8 @@
                         @change="selectedDeskId = $event.target.value"
                         x-model="formData.desk_id"
                         class="flex z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:text-gray-300 focus:ring-1 focus:ring-purple-700">
-                        <template x-for="desk in desks" :key="desk.id">
-                            <option :value="desk.id" type="option" id="desk" name="desk_id" class="block px-4 py-2 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-purple-600 dark:hover:text-white" x-text="desk.desk_number"></option>
+                        <template x-for="desk in desks" :key="desk">
+                            <option :value="desk" type="option" id="desk" name="desk_id" class="block px-4 py-2 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-purple-600 dark:hover:text-white" x-text="desk"></option>
                         </template>
                     </select>
                 </div>

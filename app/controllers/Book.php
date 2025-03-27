@@ -51,12 +51,12 @@ class Book
         $roomId = $room_id;
         $rooms = new Room;
         $selectedRoom = $rooms->where(['id' => $roomId], [], []);
+        $deskTotal = $selectedRoom[0]->desk_total;
         // 3 params of the where method are equal to, less than and greater than
-        for( $i = 1; $i <= $selectedRoom[desk_total]; $i++) {
+        for( $i = 1; $i <= $deskTotal; $i++) {
           array_push($selectedDesks, $i);
         }
         
-
         echo json_encode($selectedDesks);
     }
 
