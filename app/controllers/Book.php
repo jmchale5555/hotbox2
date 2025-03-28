@@ -50,13 +50,13 @@ class Book
         $selectedDesks = [];
         $roomId = $room_id;
         $rooms = new Room;
+        // 3 params of the where method are equal to, less than and greater than
         $selectedRoom = $rooms->where(['id' => $roomId], [], []);
         $deskTotal = $selectedRoom[0]->desk_total;
-        // 3 params of the where method are equal to, less than and greater than
         for( $i = 1; $i <= $deskTotal; $i++) {
           array_push($selectedDesks, $i);
         }
-        
+        array_unshift($selectedDesks, '...');
         echo json_encode($selectedDesks);
     }
 
@@ -64,7 +64,7 @@ class Book
     {
         $roomId = $room_id;
         $bookings = new Booking();
-        // The 3 params of the where method are equal to, less then and greater than
+        // The 3 params of the where method are equal to, less than and greater than
         $now = time() - 86400;
         $selectedBookings = $bookings->where(['room_id' => $roomId], [], ['res_date' => $now]);
 

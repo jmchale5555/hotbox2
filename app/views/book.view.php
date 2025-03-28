@@ -22,7 +22,7 @@
     </div>
     <form @submit.prevent="submitForm">
         <!-- Parent component with shared state -->
-        <div x-data="{ 
+        <div id="app" x-data="{ 
         rooms: <?php echo htmlspecialchars($rooms) ?>,
         dates: <?php echo htmlspecialchars($dates) ?>,
         desks: [],
@@ -30,6 +30,13 @@
         selectedRoomId: null,
         selectedDeskId: null,
         cancelButton: false,
+
+        get showDatePicker() {
+        return this.selectedRoomId && 
+               this.selectedRoomId !== '...' && 
+               this.selectedDeskId && 
+              this.selectedDeskId !== '...';
+          },
 
         async handleGetDesksAndBookings(roomId) {
             this.selectedRoomId = roomId;
@@ -40,17 +47,15 @@
 
         async getDesks(roomId) {
             const response = await fetch(`book/getDeskByRoomId/${roomId}`);
-            //console.log(response.json());
+            
             if (response.status !== 200) {
               (response) => console.log(response);
             } else {
-              this.desks = await response.json();
+                this.desks = await response.json();
+                //console.log(this.desks);
+                this.selectedDeskId = this.desks[0];
             }
-            if (this.desks.length > 0) {
-                this.selectedDeskId = this.desks[0].id;
-            } else {
-                this.selectedDeskId = '223';
-            }
+                //this.selectedDeskId = this.desks[0];
         },
 
         async getBookings(roomId) {
@@ -82,7 +87,7 @@
             const dateObj = new Date(reformattedDate);
             const thisUnixDate = Math.floor(dateObj.getTime() / 1000);
 
-            return thisUnixDate;            
+            return thisUnixDate;
         },
 
         isSlotBooked(date) {
@@ -118,9 +123,9 @@
 
 
         }" class="flex flex-row space-x-3">
-
+       
             <!-- Room and Desk Selection -->
-            <div class="w-2/5 gap-1 mb-6 bg-slate-200 dark:bg-slate-800 p-6 rounded-lg">
+            <div class="w-2/5 gap-1 mt-8 bg-slate-200 dark:bg-slate-800 p-6 rounded-lg">
                 <!-- Rooms dropdown -->
                 <div>
                     <label for="room" class="dark:text-gray-400">Select Room:</label>
@@ -143,10 +148,10 @@
                     <select
                         id="desk"
                         name="desk_id"
-                        @change="selectedDeskId = $event.target.value"
+                        @click="selectedDeskId = $event.target.value"
                         x-model="formData.desk_id"
                         class="flex z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:text-gray-300 focus:ring-1 focus:ring-purple-700">
-                        <template x-for="desk in desks" :key="desk">
+                        <template x-for="(desk, index) in desks" :key="index">
                             <option :value="desk" type="option" id="desk" name="desk_id" class="block px-4 py-2 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-purple-600 dark:hover:text-white" x-text="desk"></option>
                         </template>
                     </select>
@@ -154,8 +159,9 @@
             </div>
 
             <!-- Date picker -->
-            <div x-show="selectedDeskId">
-                <div x-show="selectedDeskId < 222" class="col-span-3 flex flex-wrap bg-slate-200 dark:bg-slate-700 shadow-md md:justify-center mx-auto py-4 px-2 rounded-lg">
+      <div x-show="showDatePicker">
+         <div class="bg-white border-gray-200 dark:bg-gray-900 shadow-md md:justify-center mx-auto px-2 text-blue-800 dark:text-blue-300 text-sm mb-2 rounded-sm text-center">Desk:  <span x-html="formData.desk_id"></span></div>
+              <div class="flex flex-wrap bg-slate-200 dark:bg-slate-700 shadow-md md:justify-center mx-auto py-4 px-2 rounded-lg">
                     <template x-for="value in dates">
                         <div class="flex outline group hover:bg-slate-300 dark:hover:bg-slate-600 hover:shadow-lg hover-dark-shadow rounded-lg mx-8 my-2 transition-all duration-300 cursor-pointer justify-center w-28"
                             :class="{ 'bg-indigo-900 hover:!bg-indigo-900': isSlotBooked(parseDateUnix(value)) }">
@@ -211,6 +217,7 @@
 </div>
 
 <script>
+
     document.addEventListener('alpine:init', () => {
         Alpine.data('bookingForm', () => ({
             formData: {
@@ -249,7 +256,7 @@
                     this.hasError = true;
                 }
             },
-
+  
             async deleteBooking(bookingId) {
                 const response = await fetch(`book/deleteBookingById/${bookingId}`);
                 if (!response.ok) {
