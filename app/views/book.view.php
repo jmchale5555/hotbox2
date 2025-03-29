@@ -135,7 +135,7 @@
                         @change="handleGetDesksAndBookings($event.target.value)"
                         @refresh-room-data.window="getBookings($event.detail.roomId)"
                         x-model="formData.room_id"
-                        class="flex flex-auto z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 bg-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 focus:ring-1 focus:ring-purple-700">
+                        class="flex flex-auto z-10 divide-y divide-gray-100 rounded-lg shadow w-44 bg-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 focus:ring-1 focus:ring-purple-700">
                         <template x-for="room in rooms" :key="room.id">
                             <option :value="room.id" type="option" id="room" name="room_id" class="block py-2 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" x-text="room.room_name"></option>
                         </template>
@@ -149,6 +149,7 @@
                         id="desk"
                         name="desk_id"
                         @click="selectedDeskId = $event.target.value"
+                        @change="selectedDeskId = $event.target.value"
                         x-model="formData.desk_id"
                         class="flex z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:text-gray-300 focus:ring-1 focus:ring-purple-700">
                         <template x-for="(desk, index) in desks" :key="index">
@@ -160,7 +161,7 @@
 
             <!-- Date picker -->
       <div x-show="showDatePicker">
-         <div class="bg-white border-gray-200 dark:bg-gray-900 shadow-md md:justify-center mx-auto px-2 text-blue-800 dark:text-blue-300 text-sm mb-2 rounded-sm text-center">Desk:  <span x-html="formData.desk_id"></span></div>
+         <div class="bg-white border-gray-200 dark:bg-gray-900 shadow-md md:justify-center mx-auto px-2 text-blue-800 dark:text-blue-300 text-sm mb-2 rounded-sm text-center text-xl">Desk:  <span x-html="formData.desk_id"></span></div>
               <div class="flex flex-wrap bg-slate-200 dark:bg-slate-700 shadow-md md:justify-center mx-auto py-4 px-2 rounded-lg">
                     <template x-for="value in dates">
                         <div class="flex outline group hover:bg-slate-300 dark:hover:bg-slate-600 hover:shadow-lg hover-dark-shadow rounded-lg mx-8 my-2 transition-all duration-300 cursor-pointer justify-center w-28"

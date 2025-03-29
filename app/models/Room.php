@@ -21,4 +21,34 @@ class Room
         'desk_total',
 
     ];
+
+    public function validate($data)
+    {
+        $this->errors = [];
+
+        if (empty($data['id']))
+        {
+            $this->errors['id'] = "ID is required but was not recieved";
+        }
+        else
+        if (empty($data['room_name']))
+        {
+            $this->errors['room_name'] = "Room name is required";
+        }
+        else
+        if (empty($data['desk_total']))
+        {
+            $this->errors['desk_total'] = "Desk total is required";
+        }
+
+
+        if (empty($this->errors))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+
 }
