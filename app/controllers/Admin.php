@@ -5,7 +5,6 @@ namespace Controller;
 defined('ROOTPATH') or exit('Access Denied!');
 
 use Model\Room;
-use Model\Desk;
 //use \Core\Pager;
 //use \Model\User;
 use \Core\Session;
@@ -44,11 +43,16 @@ class Admin
         echo json_encode($room->errors);
   }
 
-  public function amendDesks() 
+  public function amendDesks()
   {
-    $desk = new Desk;
+    $room = new Room;
     $data = [];
     $data = json_decode(file_get_contents('php://input'), true);
-    
+    if($room->validate($data))
+    {
+      $room->update($data->id, $data);
+    }
+
+    echo json_encode($room->errors);
   }
 }

@@ -7,16 +7,12 @@
   <div x-data="{ 
     rooms: <?php echo htmlspecialchars($rooms) ?>,
     selectedRoom: null,
-    deskCount: null,
 
     async selectRoom(room) {
           this.selectedRoom = {...room}; // Create a copy of the rooms
           // ${room.id}
       },
-      
-      async updateRoom(input) {
-        //nothing
-      },
+
       }">
 
       <div class="relative overflow-x-auto shadow-md rounded-lg">
@@ -92,8 +88,8 @@
                           <div class="grid gap-4 mb-4 grid-cols-2">
                             <!-- Hidden room id form field... -->
                             <div class="col-span-2">
-                                <div name="room_id" x-model="formData.room_id">
-                                  <input type="hidden" name="room_id" id="room_id" 
+                                <div name="id" x-model="formData.id">
+                                  <input type="hidden" name="id" id="id" 
                                         :value="selectedRoom.id"
                                         x-text="selectedRoom.id">
                                 </div>
@@ -111,18 +107,23 @@
                             </div>
                             <!-- Desk total form field... -->
                                 <div class="col-span-2">
-                                  <label for="deskCount" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Number of Desks</label>
-                                  <div name="total_desks" x-model="formData.total_desks">
-                                    <input type="text" name="total_desks" id="total_desks" 
+                                  <label for="desk_total" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Number of Desks</label>
+                                  <div name="desk_total" x-model="formData.desk_total">
+                                    <input type="text" name="desk_total" id="desk_total" 
                                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
                                       :value="selectedRoom.desk_total"
                                       x-text="selectedRoom.desk_total">
                                   </div>
                                 </div>
-                        </div>
-                        <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            Update Room
+                          </div>
+                        <button :disabled="isSubmitting" class="grid row-span-1 flex float-right min-w-max text-white !bg-gradient-to-br !from-purple-600 !to-blue-500 !hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2 text-center my-3 me-2 mb-2">
+                            <span x-show="!isSubmitting">Update Room</span>
+                            <span x-show="isSubmitting">Saving...</span>
                         </button>
+
+                          <!--<button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                              Update Room
+                          </button>-->
                     </form>
                 </template>
             </div>
@@ -134,9 +135,9 @@
     document.addEventListener('alpine:init', () => {
         Alpine.data('adminForm', () => ({
             formData: {
-                room_id: "",
+                id: "",
                 room_name: "",
-                total_desks: "",
+                desk_total: "",
             },
             errors: {},
             message: '',
