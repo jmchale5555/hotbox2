@@ -38,21 +38,71 @@ class Admin
 
   public function deleteRoomById($roomId)
   {
-        $room = new Room;
-        $room->delete($roomId);
-        echo json_encode($room->errors);
+    // Add validation for roomId
+    if(!$roomId || !is_numeric($roomId)) {
+        echo json_encode(['success' => false, 'message' => 'Invalid room ID']);
+        return;
+    }
+    
+    $room = new Room;
+    $room->delete($roomId);
+    
+    // Return a proper response
+    if(empty($room->errors)) {
+        echo json_encode(['success' => true, 'message' => 'Room deleted successfully']);
+    } else {
+        echo json_encode(['success' => false, 'errors' => $room->errors]);
+    }
   }
 
   public function amendDesks()
   {
-    $room = new Room;
-    $data = [];
-    $data = json_decode(file_get_contents('php://input'), true);
-    if($room->validate($data))
-    {
-      $room->update($data->id, $data);
+    // Get JSON input
+    $raw_data = file_get_contents('php://input');
+    $data = json_decode($raw_data, true);
+    
+    // Debug logging
+    error_log("Received data in amendDesks: " . print_r($data, true));
+    
+    // Response array
+    $response = ['success' => false];
+    
+    // Check if data is valid
+    if(!is_array($data) || empty($data)) {
+        $response['message'] = 'No data received or invalid format';
+        echo json_encode($response);
+        return;
     }
-
-    echo json_encode($room->errors);
+    
+    // Check for required ID
+    if(!isset($data['id']) || empty($data['id'])) {
+        $response['message'] = 'Room ID is required';
+        echo json_encode($response);
+        return;
+    }
+    
+    $room = new Room;
+    
+    // Validate the data
+    if($room->validate($data)) {
+        // Update using the framework's method
+        $room->update($data['id'], $data);
+        
+        // Check for errors
+        if(empty($room->errors)) {
+            $response = [
+                'success' => true,
+                'message' => 'Room updated successfully'
+            ];
+        } else {
+            $response['errors'] = $room->errors;
+            $response['message'] = 'Validation failed';
+        }
+    } else {
+        $response['errors'] = $room->errors;
+        $response['message'] = 'Validation failed';
+    }
+    
+    echo json_encode($response);
   }
 }
