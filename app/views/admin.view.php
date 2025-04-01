@@ -33,7 +33,7 @@
                       </th>
                       <th scope="col" class="col-span-2 px-6 py-3">
  
-                    <button type="button" @click="newRoom" :disabled="isSubmitting" button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="float-right min-w-max text-white !bg-gradient-to-br !from-purple-600 !to-blue-500 !hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2 text-center my-3 me-2 mb-2">
+                    <button type="button" @click="newRoom(rooms[0])" :disabled="isSubmitting" button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="float-right min-w-max text-white !bg-gradient-to-br !from-purple-600 !to-blue-500 !hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2 text-center my-3 me-2 mb-2">
                         <span x-show="!isSubmitting">New Room</span>
                         <span x-show="isSubmitting">Saving...</span>
                     </button>                         
@@ -123,7 +123,7 @@
                         </template>
  
                     <button type="submit" :disabled="isSubmitting" class="float-right min-w-max text-white !bg-gradient-to-br !from-purple-600 !to-blue-500 !hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2 text-center my-3 me-2 mb-2">
-                        <span x-show="!isSubmitting">Update Room</span>
+                        <span x-show="!isSubmitting" x-text="selectedRoom == rooms[0] ? 'Add Room' : 'Update Room'"></span>
                         <span x-show="isSubmitting">Saving...</span>
                     </button>
                 </form>
@@ -147,17 +147,18 @@
             isSubmitting: false,
             showDeleteModal: false,
             roomToDelete: null,
+            newRoomId: null,
 
-            async newRoom() {
-                this.selectedRoom = this.rooms[0];
-
+            async newRoom(room) {
+                this.selectedRoom = {...room}; // create a copy of the blankety blank room isernt ert
+                this.newRoomId = this.rooms.length + 1;
           // Initialize formData with the selected room data
                 this.formData = {
-                    id: null,
+                    id: this.newRoomId,
                     room_name: null,
                     desk_total: null,
                 };
-
+                console.log("Form data initialized:", this.formData);
 
             },
 
@@ -181,9 +182,13 @@
                 this.message = '';
                 
                 console.log("Submitting form data:", this.formData);
-                
-                try {
-                    const response = await fetch('admin/amendDesks', {
+               
+              try {
+
+            let response; //declare response here so it is available outside the if conditional
+            if(this.formData.id !== this.newRoomId) {
+              console.log('attempting amendDesks fetch');
+                    response = await fetch('admin/amendDesks', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -191,7 +196,19 @@
                         },
                         body: JSON.stringify(this.formData)
                     });
-
+            } else {
+              console.log('attempting addRoom fetch');
+                    response = await fetch('admin/addRoom', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                        },
+                        body: JSON.stringify(this.formData)
+                    });
+              this.rooms.push(this.formData);
+            }
+              console.log("response is this:", response);
                     const result = await response.json();
                     console.log("Server response:", result);
                     

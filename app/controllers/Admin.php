@@ -105,4 +105,56 @@ class Admin
     
     echo json_encode($response);
   }
+
+    public function addRoom()
+  {
+    // Get JSON input
+    $raw_data = file_get_contents('php://input');
+    $data = json_decode($raw_data, true);
+    
+    // Debug logging
+    error_log("Received data in addRoom: " . print_r($data, true));
+    
+    // Response array
+    $response = ['success' => false];
+    
+    // Check if data is valid
+    if(!is_array($data) || empty($data)) {
+        $response['message'] = 'No data received or invalid format';
+        echo json_encode($response);
+        return;
+    }
+    
+    // Check for required ID
+    if(!isset($data['id']) || empty($data['id'])) {
+        $response['message'] = 'Room ID is required';
+        echo json_encode($response);
+        return;
+    }
+    
+    $room = new Room;
+    
+    // Validate the data
+    if($room->validate($data)) {
+        // Update using the framework's method
+        $room->insert($data);
+        
+        // Check for errors
+        if(empty($room->errors)) {
+            $response = [
+                'success' => true,
+                'message' => 'Room updated successfully'
+            ];
+        } else {
+            $response['errors'] = $room->errors;
+            $response['message'] = 'Validation failed';
+        }
+    } else {
+        $response['errors'] = $room->errors;
+        $response['message'] = 'Validation failed';
+    }
+    
+    echo json_encode($response);
+  }
+
 }
