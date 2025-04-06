@@ -254,10 +254,10 @@
                             },
                             body: JSON.stringify(this.formData)
                         });
-                        // Refresh room data instead of pushing directly
-                        this.$dispatch('refresh-room-data');
+
                     }
-                    
+                    // Refresh room data instead of pushing directly
+                    this.$dispatch('refresh-room-data');
                     console.log("response is this:", response);
                     const result = await response.json();
                     console.log("Server response:", result);
