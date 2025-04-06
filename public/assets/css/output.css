@@ -1784,6 +1784,14 @@ input:checked + .toggle-bg {
   background-color: rgb(255 255 255 / 0.5);
 }
 
+.bg-slate-800\/75 {
+  background-color: rgb(30 41 59 / 0.75);
+}
+
+.bg-gray-800\/75 {
+  background-color: rgb(31 41 55 / 0.75);
+}
+
 .bg-opacity-50 {
   --tw-bg-opacity: 0.5;
 }

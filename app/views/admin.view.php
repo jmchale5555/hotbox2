@@ -3,11 +3,11 @@
 <h4 class="text-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Admin panel</h4>
 <p class="text-center mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">Welcome <?= $name ?></p>
 <div x-data="adminForm">
-    <div id="deleteModal"
+    <div 
         tabindex="-1"
         aria-hidden="true"
         x-show="showDeleteModal"
-        class=" hidden fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50"
+        class="flex fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50"
         x-cloak>
         <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full">
             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Confirm Room Deletion</h3>
@@ -15,11 +15,11 @@
             <div class="flex justify-end space-x-3">
                 <button @click="showDeleteModal = false"
                     class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
-                    data-modal-toggle="deleteModal">
+                    >
                     Cancel
                 </button>
                 <button @click="confirmDelete()"
-                    data-modal-toggle="deleteModal"
+                    
                     class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
                     Confirm
                 </button>
@@ -74,7 +74,7 @@
                       </th>
                       <th scope="col" class="col-span-2 px-6 py-3">
  
-                    <button type="button" @click="newRoom(rooms[0])" data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="float-right min-w-max text-white !bg-gradient-to-br !from-purple-600 !to-blue-500 !hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2 text-center my-3 me-2 mb-2">
+                    <button type="button" @click="newRoom(rooms[0])" class="float-right min-w-max text-white !bg-gradient-to-br !from-purple-600 !to-blue-500 !hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2 text-center my-3 me-2 mb-2">
                         <span>New Room</span>
                         
                     </button>                         
@@ -92,21 +92,21 @@
 
                           </td>
                           <td class="px-6 py-4">
-                              <a href="#" @click.prevent="selectRoom(room)" button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="rounded-lg font-medium bg-slate-800 hover:text-blue-700 p-2 text-purple-500 dark:hover:bg-gray-700">Edit</a>
+                              <a href="#" @click.prevent="selectRoom(room)" button  class="rounded-lg font-medium bg-slate-800 hover:text-blue-700 p-2 text-purple-500 dark:hover:bg-gray-700">Edit</a>
                           </td>
                           <td class="px-6 py-4">
-                              <a href="#" @click.prevent="openDeleteModal(room.id)" id="deleteButton" button data-modal-target="deleteModal" data-modal-toggle="deleteModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a>
+                              <a href="#" @click.prevent="openDeleteModal(room.id)"  class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a>
                           </td>
                       </tr>
                   </tbody>
               </template>
           </table>
     <!-- Modal starts -->
-    <div id="crud-modal" 
+    <div  
         x-show="showCrudModal" 
         tabindex="-1"
         aria-hidden="true"
-        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        class="flex bg-black bg-opacity-50 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <!-- Modal content -->
         <div class="relative p-4 w-full max-w-md max-h-full">
             <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
@@ -117,7 +117,7 @@
                     </h3>
                     <button type="button" 
                           @click="showCrudModal = false"
-                          class="focus:outline-none text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
+                          class="focus:outline-none text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
                         <svg aria-hidden="true" class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                         </svg>
@@ -126,7 +126,7 @@
                 </div>
  
             <!-- Modal form with two-way binding -->
-            <template x-if="selectedRoom !== null">
+            <template x-if="showCrudModal == true">
                 <form class="p-4 md:p-5" @submit.prevent="submitForm" data-modal-toggle="crud-modal">
                     <div class="grid gap-4 mb-4 grid-cols-2">
                         <!-- Hidden room id form field -->
@@ -164,12 +164,11 @@
  
                     <button type="submit" :disabled="isSubmitting"
                             button
-                            data-modal-hide="crud-modal"
-
+                            x-init="setTimeout(() => isSubmitting = false, 1)"
                             class="float-right min-w-max text-white !bg-gradient-to-br !from-purple-600 !to-blue-500 !hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2 text-center my-3 me-2 mb-2">
                            
-                        <span x-show="!this.isSubmitting" x-text="formData.id == null ? 'Add Room' : 'Update Room'"></span>
-                        <span x-show="this.isSubmitting">Saving...</span>
+                        <span x-show="!isSubmitting" x-text="formData.id == null ? 'Add Room' : 'Update Room'"></span>
+                        <span x-show="isSubmitting">Saving...</span>
                     </button>
                 </form>
             </template>
@@ -287,7 +286,7 @@
                       this.hasError = true;
                       this.message = 'An error occurred while updating the room.';
                   } finally {
-                      this.isSubmitting = false;
+                      //this.isSubmitting = false;
                   }
               },
             
@@ -312,7 +311,7 @@
 
                       // Close the modal after success
                       setTimeout(() => {
-                        //this.showDeleteModal = false;
+                        this.showDeleteModal = false;
                         this.roomToDelete = null;
                       }, 2000); // Close after 2 seconds so the user can see the success message
                     } else {
