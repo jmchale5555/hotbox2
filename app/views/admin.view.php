@@ -3,59 +3,99 @@
 <h4 class="text-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Admin panel</h4>
 <p class="text-center mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">Welcome <?= $name ?></p>
 <div x-data="adminForm">
+    <div id="deleteModal"
+        tabindex="-1"
+        aria-hidden="true"
+        x-show="showDeleteModal"
+        class=" hidden fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50"
+        x-cloak>
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Confirm Room Deletion</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-6">Are you sure you want to delete this room?</p>
+            <div class="flex justify-end space-x-3">
+                <button @click="showDeleteModal = false"
+                    class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                    data-modal-toggle="deleteModal">
+                    Cancel
+                </button>
+                <button @click="confirmDelete()"
+                    data-modal-toggle="deleteModal"
+                    class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                    Confirm
+                </button>
+            </div>
+            <template x-if="message" class="col-span-2">
+                  <div class="col-span-2" x-init="setTimeout(() => message = '', 3000)"
+                      :class="{'text-green-500': !hasError, 'text-red-500': hasError}"
+                      x-text="message">
+                  </div>
+            </template>
+        </div>
+    </div>
 
   <div x-data="{ 
     rooms: <?php echo htmlspecialchars($rooms) ?>,
-    selectedRoom: null,
 
-    //async selectRoom(room) {
-    //      this.selectedRoom = {...room}; // Create a copy of the rooms
-          // ${room.id}
+    async getRooms() {
+        try {
+            const response = await fetch(`admin/getRooms`);
+            
+            if (!response.ok) {
+                console.error('Failed to fetch rooms:', response.status);
+                return;
+            }
+            
+            const freshRooms = await response.json();
+            console.log('Fresh rooms received:', freshRooms);
+            this.rooms = freshRooms || []; // ensure rooms is always an array
+        } catch (error) {
+            console.error('Error fetching rooms:', error);
+        }
+    }
+
+          //${room.id}
     //  },
 
       }">
 
       <div class="relative overflow-x-auto shadow-md rounded-lg">
-          <table class="table w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-12 ">
+          <table class="table w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-12" @refresh-room-data.window="getRooms()">
               <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
-                      <th scope="col" class="px-6 py-3">
-                          Room ID
-                      </th>
+
                       <th scope="col" class="px-6 py-3">
                           Room name
                       </th>
                       <th scope="col" class="px-6 py-3">
-                          Date added
+                          Number of Desks
                       </th>
                       <th scope="col" class="col-span-2 px-6 py-3">
                           Actions
                       </th>
                       <th scope="col" class="col-span-2 px-6 py-3">
  
-                    <button type="button" @click="newRoom(rooms[0])" :disabled="isSubmitting" button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="float-right min-w-max text-white !bg-gradient-to-br !from-purple-600 !to-blue-500 !hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2 text-center my-3 me-2 mb-2">
-                        <span x-show="!isSubmitting">New Room</span>
-                        <span x-show="isSubmitting">Saving...</span>
+                    <button type="button" @click="newRoom(rooms[0])" data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="float-right min-w-max text-white !bg-gradient-to-br !from-purple-600 !to-blue-500 !hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2 text-center my-3 me-2 mb-2">
+                        <span>New Room</span>
+                        
                     </button>                         
                       </th>
                   </tr>
               </thead>
               <template x-for="room in rooms.filter((_, index) => index > 0)" :key="room.id">
-                  <tbody class="even:bg-gray-50 odd:bg-gray-300 even:dark:bg-slate-700 odd:dark:bg-slate-800 border-gray-200 dark:border-gray-700">
+                  <tbody class="even:bg-gray-50 odd:bg-gray-300 even:dark:bg-slate-700 odd:dark:bg-slate-800 border-gray-200 dark:border-gray-700" >
 
                       <tr class="table-row rounded-lg">
-                          <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" x-text="room.id">
-                          </td>
+
                           <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" x-text="room.room_name">
                           </td>
-                          <td class="px-6 py-4" x-text="room.created_at">
+                          <td class="px-6 py-4" x-text="room.desk_total">
 
                           </td>
                           <td class="px-6 py-4">
                               <a href="#" @click.prevent="selectRoom(room)" button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="rounded-lg font-medium bg-slate-800 hover:text-blue-700 p-2 text-purple-500 dark:hover:bg-gray-700">Edit</a>
                           </td>
                           <td class="px-6 py-4">
-                              <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a>
+                              <a href="#" @click.prevent="openDeleteModal(room.id)" id="deleteButton" button data-modal-target="deleteModal" data-modal-toggle="deleteModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a>
                           </td>
                       </tr>
                   </tbody>
@@ -63,7 +103,7 @@
           </table>
     <!-- Modal starts -->
     <div id="crud-modal" 
-        x-show="selectedRoom !== null"
+        x-show="showCrudModal" 
         tabindex="-1"
         aria-hidden="true"
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -72,11 +112,11 @@
             <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white" x-text=" selectedRoom == rooms[0] ? 'New Room' : 'Edit Room'">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white" x-text=" formData.id == null ? 'New Room' : 'Edit Room'">
                         
                     </h3>
                     <button type="button" 
-                          @click="selectedRoom = null"
+                          @click="showCrudModal = false"
                           class="focus:outline-none text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
                         <svg aria-hidden="true" class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -86,8 +126,8 @@
                 </div>
  
             <!-- Modal form with two-way binding -->
-            <template x-if="selectedRoom">
-                <form class="p-4 md:p-5" @submit.prevent="submitForm">
+            <template x-if="selectedRoom !== null">
+                <form class="p-4 md:p-5" @submit.prevent="submitForm" data-modal-toggle="crud-modal">
                     <div class="grid gap-4 mb-4 grid-cols-2">
                         <!-- Hidden room id form field -->
                         <div class="col-span-2">
@@ -122,39 +162,47 @@
                             </div>
                         </template>
  
-                    <button type="submit" :disabled="isSubmitting" class="float-right min-w-max text-white !bg-gradient-to-br !from-purple-600 !to-blue-500 !hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2 text-center my-3 me-2 mb-2">
-                        <span x-show="!isSubmitting" x-text="selectedRoom == rooms[0] ? 'Add Room' : 'Update Room'"></span>
-                        <span x-show="isSubmitting">Saving...</span>
+                    <button type="submit" :disabled="isSubmitting"
+                            button
+                            data-modal-hide="crud-modal"
+
+                            class="float-right min-w-max text-white !bg-gradient-to-br !from-purple-600 !to-blue-500 !hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2 text-center my-3 me-2 mb-2">
+                           
+                        <span x-show="!this.isSubmitting" x-text="formData.id == null ? 'Add Room' : 'Update Room'"></span>
+                        <span x-show="this.isSubmitting">Saving...</span>
                     </button>
                 </form>
             </template>
           </div>
-        </div>
+
     </div>
+  </div>
 </div>
 <!-- </div> -->
 <script>
     document.addEventListener('alpine:init', () => {
         Alpine.data('adminForm', () => ({
             formData: {
-                id: "",
+                id: null,
                 room_name: "",
-                desk_total: ""
+                desk_total: null
             },
             errors: {},
             message: '',
             hasError: false,
             isSubmitting: false,
             showDeleteModal: false,
+            showCrudModal: false,
+            selectedRoom: null,
             roomToDelete: null,
-            newRoomId: null,
+            
 
             async newRoom(room) {
-                this.selectedRoom = {...room}; // create a copy of the blankety blank room isernt ert
-                this.newRoomId = this.rooms.length + 1;
+                this.showCrudModal = true;
+                
           // Initialize formData with the selected room data
                 this.formData = {
-                    id: this.newRoomId,
+                    id: null,
                     room_name: null,
                     desk_total: null,
                 };
@@ -164,6 +212,7 @@
 
             // Initialize formData when a room is selected
             async selectRoom(room) {
+                this.showCrudModal = true;
                 this.selectedRoom = {...room}; // Create a copy of the room
                 
                 // Initialize formData with the selected room data
@@ -182,64 +231,65 @@
                 this.message = '';
                 
                 console.log("Submitting form data:", this.formData);
-               
-              try {
-
-            let response; //declare response here so it is available outside the if conditional
-            if(this.formData.id !== this.newRoomId) {
-              console.log('attempting amendDesks fetch');
-                    response = await fetch('admin/amendDesks', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
-                        },
-                        body: JSON.stringify(this.formData)
-                    });
-            } else {
-              console.log('attempting addRoom fetch');
-                    response = await fetch('admin/addRoom', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
-                        },
-                        body: JSON.stringify(this.formData)
-                    });
-              this.rooms.push(this.formData);
-            }
-              console.log("response is this:", response);
+              
+                try {
+                    let response;
+                    if(this.formData.id !== null) {
+                        console.log('attempting amendDesks fetch');
+                        response = await fetch('admin/amendDesks', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                            },
+                            body: JSON.stringify(this.formData)
+                        });
+                    } else {
+                        console.log('attempting addRoom fetch');
+                        response = await fetch('admin/addRoom', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                            },
+                            body: JSON.stringify(this.formData)
+                        });
+                        // Refresh room data instead of pushing directly
+                        this.$dispatch('refresh-room-data');
+                    }
+                    
+                    console.log("response is this:", response);
                     const result = await response.json();
                     console.log("Server response:", result);
-                    
-                    if (result.success) {
-                        this.hasError = false;
-                        this.message = result.message || 'Room updated successfully!';
-                        
-                        // Update the room in the local array to reflect changes
-                        if (Array.isArray(this.rooms)) {
-                            this.rooms = this.rooms.map(r => 
-                                r.id === this.formData.id ? {...r, ...this.formData} : r
-                            );
-                        }
-                        
-                        // Close the modal
-                        //this.selectedRoom = null;
-                    } else {
-                        this.hasError = true;
-                        this.errors = result.errors || {};
-                        this.message = result.message || 'An error occurred';
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                    this.hasError = true;
-                    this.message = 'An error occurred while updating the room.';
-                } finally {
-                    this.isSubmitting = false;
-                }
-            },
-
-            // Methods below not yet implemented 30-mar-25
+                      
+                      if (result.success) {
+                            this.hasError = false;
+                            this.message = result.message || (this.formData.id === null ? 'Room added successfully' : 'Room updated successfully!');
+                            
+                          // For edits, update the room in the local array to reflect changes
+                          if (this.formData.id !== null && Array.isArray(this.rooms)) {
+                              this.rooms = this.rooms.map(r => 
+                                  r.id === this.formData.id ? {...r, ...this.formData} : r
+                              );
+                          }
+                          
+                          // Close the modal after success
+                          setTimeout(() => {
+                              this.showCrudModal = false;
+                          }, 2000); // Close after 2 seconds so the user can see the success message
+                      } else {
+                          this.hasError = true;
+                          this.errors = result.errors || {};
+                          this.message = result.message || 'An error occurred';
+                      }
+                  } catch (error) {
+                      console.error('Error:', error);
+                      this.hasError = true;
+                      this.message = 'An error occurred while updating the room.';
+                  } finally {
+                      this.isSubmitting = false;
+                  }
+              },
             
             openDeleteModal(roomId) {
                 this.roomToDelete = roomId;
@@ -256,18 +306,19 @@
                     if (result.success) {
                         this.message = 'Room deleted successfully!';
                         this.hasError = false;
-                        
-                        // Update local array
-                        if (Array.isArray(this.rooms)) {
-                            this.rooms = this.rooms.filter(room => room.id !== this.roomToDelete);
-                        }
+
+                        // Refresh room data instead of pushing directly
+                        this.$dispatch('refresh-room-data');
+
+                      // Close the modal after success
+                      setTimeout(() => {
+                        //this.showDeleteModal = false;
+                        this.roomToDelete = null;
+                      }, 2000); // Close after 2 seconds so the user can see the success message
                     } else {
                         this.message = result.message || 'An error occurred while deleting the room.';
                         this.hasError = true;
                     }
-                    
-                    this.showDeleteModal = false;
-                    this.roomToDelete = null;
                 } catch (error) {
                     console.error('Error:', error);
                     this.message = 'An error occurred while deleting the room.';

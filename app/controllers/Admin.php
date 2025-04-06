@@ -125,13 +125,6 @@ class Admin
         return;
     }
     
-    // Check for required ID
-    if(!isset($data['id']) || empty($data['id'])) {
-        $response['message'] = 'Room ID is required';
-        echo json_encode($response);
-        return;
-    }
-    
     $room = new Room;
     
     // Validate the data
@@ -143,7 +136,7 @@ class Admin
         if(empty($room->errors)) {
             $response = [
                 'success' => true,
-                'message' => 'Room updated successfully'
+                'message' => 'Room added successfully'
             ];
         } else {
             $response['errors'] = $room->errors;
@@ -157,4 +150,10 @@ class Admin
     echo json_encode($response);
   }
 
+  public function getRooms()
+  {
+  $freshRooms = new Room();
+  $rooms = $freshRooms->all();
+  echo json_encode($rooms);
+ }
 }

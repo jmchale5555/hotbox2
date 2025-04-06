@@ -47,7 +47,6 @@
 
         async getDesks(roomId) {
             const response = await fetch(`book/getDeskByRoomId/${roomId}`);
-            
             if (response.status !== 200) {
               (response) => console.log(response);
             } else {
