@@ -75,7 +75,7 @@
                       <th scope="col" class="col-span-2 px-6 py-3">
  
                     <button type="button" @click="newRoom(rooms[0])" class="float-right min-w-max text-white !bg-gradient-to-br !from-purple-600 !to-blue-500 !hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2 text-center my-3 me-2 mb-2">
-                        <span>New Room</span>
+                        <span>Add Room</span>
                         
                     </button>                         
                       </th>
@@ -112,7 +112,7 @@
             <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white" x-text=" formData.id == null ? 'New Room' : 'Edit Room'">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white" x-text=" formData.id == null ? 'Add Room' : 'Edit Room'">
                         
                     </h3>
                     <button type="button" 
@@ -199,10 +199,10 @@
             async newRoom(room) {
                 this.showCrudModal = true;
                 
-          // Initialize formData with the selected room data
+          // reset formData from previous selection to blankety blank
                 this.formData = {
                     id: null,
-                    room_name: null,
+                    room_name: "",
                     desk_total: null,
                 };
                 console.log("Form data initialized:", this.formData);
