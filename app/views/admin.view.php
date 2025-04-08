@@ -1,6 +1,6 @@
 <?php include 'partials/header.view.php' ?>
 
-<h4 class="text-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Admin panel</h4>
+<!--h4 class="text-center mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-2xl dark:text-white">Admin panel</h4-->
 <p class="text-center mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">Welcome <?= $name ?></p>
 <div x-data="adminForm">
     <div 
@@ -92,7 +92,7 @@
 
                           </td>
                           <td class="px-6 py-4">
-                              <a href="#" @click.prevent="selectRoom(room)" button  class="rounded-lg font-medium bg-slate-800 hover:text-blue-700 p-2 text-purple-500 dark:hover:bg-gray-700">Edit</a>
+                              <a href="#" @click.prevent="selectRoom(room)" button class="font-medium hover:underline p-2 text-purple-600 dark:text-purple-500">Edit</a>
                           </td>
                           <td class="px-6 py-4">
                               <a href="#" @click.prevent="openDeleteModal(room.id)"  class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a>
