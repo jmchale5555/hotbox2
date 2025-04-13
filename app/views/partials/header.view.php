@@ -7,4 +7,4 @@
 
 <body>
 
-    <div class="max-w-screen-lg w-4/5 mx-auto p-4 min-h-full">
+    <div class="max-w-screen-lg w-4/5 mx-auto p-2 min-h-full">

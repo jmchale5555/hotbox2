@@ -47,11 +47,15 @@ class Book
 
     public function getDeskByRoomId($room_id)
     {
+        $selectedDesks = [];
         $roomId = $room_id;
-        $desks = new Desk;
-        // 3 params of the where method are equal to, less than and greater than
-        $selectedDesks = $desks->where(['room_id' => $roomId], [], []);
-
+        $rooms = new Room;
+        $selectedRoom = $rooms->where(['id' => $roomId], [], []);
+        $deskTotal = $selectedRoom[0]->desk_total;
+        for( $i = 1; $i <= $deskTotal; $i++) {
+          array_push($selectedDesks, $i);
+        }
+        array_unshift($selectedDesks, '...');
         echo json_encode($selectedDesks);
     }
 
@@ -59,7 +63,8 @@ class Book
     {
         $roomId = $room_id;
         $bookings = new Booking();
-        // The 3 params of the where method are equal to, less then and greater than
+        // where method args: equal to, less than, greater than.
+        // get bookings for selected room from today on
         $now = time() - 86400;
         $selectedBookings = $bookings->where(['room_id' => $roomId], [], ['res_date' => $now]);
 
