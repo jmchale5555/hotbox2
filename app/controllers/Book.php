@@ -50,7 +50,6 @@ class Book
         $selectedDesks = [];
         $roomId = $room_id;
         $rooms = new Room;
-        // 3 params of the where method are equal to, less than and greater than
         $selectedRoom = $rooms->where(['id' => $roomId], [], []);
         $deskTotal = $selectedRoom[0]->desk_total;
         for( $i = 1; $i <= $deskTotal; $i++) {
@@ -64,7 +63,8 @@ class Book
     {
         $roomId = $room_id;
         $bookings = new Booking();
-        // The 3 params of the where method are equal to, less than and greater than
+        // where method args: equal to, less than, greater than.
+        // get bookings for selected room from today on
         $now = time() - 86400;
         $selectedBookings = $bookings->where(['room_id' => $roomId], [], ['res_date' => $now]);
 
