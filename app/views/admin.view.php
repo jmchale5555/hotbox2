@@ -70,8 +70,12 @@
                           Number of Desks
                       </th>
                       <th scope="col" class="col-span-2 px-6 py-3">
+                          Room Plan
+                      </th>
+                      <th scope="col" class="col-span-2 px-6 py-3">
                           Actions
                       </th>
+
                       <th scope="col" class="col-span-2 px-6 py-3">
  
                     <button type="button" @click="newRoom(rooms[0])" class="float-right min-w-max text-white !bg-gradient-to-br !from-purple-600 !to-blue-500 !hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2 text-center my-3 me-2 mb-2">
@@ -90,6 +94,9 @@
                           </td>
                           <td class="px-6 py-4" x-text="room.desk_total">
 
+                          </td>
+                          <td class="px-6 py-4">
+                            <img x-bind:src="room.room_image ? room.room_image : '/assets/images/no-image.png'" class="h-10 w-10 object-cover rounded" alt="Room image">
                           </td>
                           <td class="px-6 py-4">
                               <a href="#" @click.prevent="selectRoom(room)" button class="font-medium hover:underline p-2 text-purple-600 dark:text-purple-500">Edit</a>
@@ -153,6 +160,22 @@
                                 x-model="formData.desk_total">
                             <div x-show="errors.desk_total" class="text-red-500 text-sm mt-1" x-text="errors.desk_total"></div>
                         </div>
+                        <!-- Add room image field -->
+                        <div class="col-span-2">
+                            <label for="room_image" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Room Image</label>
+                            <div class="flex items-center space-x-4">
+                                <img x-bind:src="imagePreview || (formData.room_image ? formData.room_image : '/assets/images/no-image.png')" 
+                                    class="h-16 w-16 object-cover rounded" 
+                                    alt="Room image preview">
+                                
+                                <div class="flex-1">
+                                    <input type="file" id="image_upload" @change="handleImageUpload" 
+                                          accept="image/*"
+                                          class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                                    <div x-show="errors.room_image" class="text-red-500 text-sm mt-1" x-text="errors.room_image"></div>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- Status message (shows success or error -->
                        <template x-if="message" class="col-span-2">
@@ -179,153 +202,174 @@
 </div>
 <!-- </div> -->
 <script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('adminForm', () => ({
-            formData: {
+document.addEventListener('alpine:init', () => {
+    Alpine.data('adminForm', () => ({
+        formData: {
+            id: null,
+            room_name: "",
+            desk_total: null,
+            room_image: null
+        },
+        errors: {},
+        message: '',
+        hasError: false,
+        isSubmitting: false,
+        showDeleteModal: false,
+        showCrudModal: false,
+        selectedRoom: null,
+        roomToDelete: null,
+        imageFile: null,  // To store the file object
+        imagePreview: null, // For image preview
+        
+        async newRoom(room) {
+            this.showCrudModal = true;
+            
+            // reset formData from previous selection to blankety blank
+            this.formData = {
                 id: null,
                 room_name: "",
-                desk_total: null
-            },
-            errors: {},
-            message: '',
-            hasError: false,
-            isSubmitting: false,
-            showDeleteModal: false,
-            showCrudModal: false,
-            selectedRoom: null,
-            roomToDelete: null,
+                desk_total: null,
+                room_image: null
+            };
+            this.imageFile = null;
+            this.imagePreview = null;
+            console.log("Form data initialized:", this.formData);
+        },
+
+        // Initialize formData when a room is selected
+        async selectRoom(room) {
+            this.showCrudModal = true;
+            this.selectedRoom = {...room}; // Create a copy of the room
             
-
-            async newRoom(room) {
-                this.showCrudModal = true;
-                
-          // reset formData from previous selection to blankety blank
-                this.formData = {
-                    id: null,
-                    room_name: "",
-                    desk_total: null,
-                };
-                console.log("Form data initialized:", this.formData);
-
-            },
-
-            // Initialize formData when a room is selected
-            async selectRoom(room) {
-                this.showCrudModal = true;
-                this.selectedRoom = {...room}; // Create a copy of the room
-                
-                // Initialize formData with the selected room data
-                this.formData = {
-                    id: room.id,
-                    room_name: room.room_name,
-                    desk_total: room.desk_total
-                };
-                
-                console.log("Form data initialized:", this.formData);
-            },
-
-            async submitForm() {
-                this.isSubmitting = true;
-                this.errors = {};
-                this.message = '';
-                
-                console.log("Submitting form data:", this.formData);
-              
-                try {
-                    let response;
-                    if(this.formData.id !== null) {
-                        console.log('attempting amendDesks fetch');
-                        response = await fetch('admin/amendDesks', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
-                            },
-                            body: JSON.stringify(this.formData)
-                        });
-                    } else {
-                        console.log('attempting addRoom fetch');
-                        response = await fetch('admin/addRoom', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
-                            },
-                            body: JSON.stringify(this.formData)
-                        });
-
-                    }
-                    // Refresh room data instead of pushing directly
-                    this.$dispatch('refresh-room-data');
-                    console.log("response is this:", response);
-                    const result = await response.json();
-                    console.log("Server response:", result);
-                      
-                      if (result.success) {
-                            this.hasError = false;
-                            this.message = result.message || (this.formData.id === null ? 'Room added successfully' : 'Room updated successfully!');
-                            
-                          // For edits, update the room in the local array to reflect changes
-                          if (this.formData.id !== null && Array.isArray(this.rooms)) {
-                              this.rooms = this.rooms.map(r => 
-                                  r.id === this.formData.id ? {...r, ...this.formData} : r
-                              );
-                          }
-                          
-                          // Close the modal after success
-                          setTimeout(() => {
-                              this.showCrudModal = false;
-                          }, 2000); // Close after 2 seconds so the user can see the success message
-                      } else {
-                          this.hasError = true;
-                          this.errors = result.errors || {};
-                          this.message = result.message || 'An error occurred';
-                      }
-                  } catch (error) {
-                      console.error('Error:', error);
-                      this.hasError = true;
-                      this.message = 'An error occurred while updating the room.';
-                  } finally {
-                      //this.isSubmitting = false;
-                  }
-              },
+            // Initialize formData with the selected room data
+            this.formData = {
+                id: room.id,
+                room_name: room.room_name,
+                desk_total: room.desk_total,
+                room_image: room.room_image
+            };
             
-            openDeleteModal(roomId) {
-                this.roomToDelete = roomId;
-                this.showDeleteModal = true;
-            },
+            this.imageFile = null;
+            this.imagePreview = null;
+            console.log("Form data initialized:", this.formData);
+        },
+        
+        // Handle image upload and preview
+        handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            this.imageFile = file;
+            
+            // Create preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                this.imagePreview = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        },
 
-            async confirmDelete() {
-                if (!this.roomToDelete) return;
+        async submitForm() {
+            this.isSubmitting = true;
+            this.errors = {};
+            this.message = '';
+            
+            console.log("Submitting form data:", this.formData);
+            
+            try {
+                // Create FormData object for file upload
+                const formData = new FormData();
+                formData.append('id', this.formData.id || '');
+                formData.append('room_name', this.formData.room_name);
+                formData.append('desk_total', this.formData.desk_total);
                 
-                try {
-                    const response = await fetch(`admin/deleteRoomById/${this.roomToDelete}`);
-                    const result = await response.json();
+                // If there's a new image file, append it
+                if (this.imageFile) {
+                    formData.append('room_image', this.imageFile);
+                }
+                
+                let response;
+                if(this.formData.id !== null) {
+                    console.log('attempting amendDesks fetch with image');
+                    response = await fetch('admin/amendDesks', {
+                        method: 'POST',
+                        body: formData, // Use FormData instead of JSON
+                        // Do not set Content-Type header, browser will set it with boundary for FormData
+                    });
+                } else {
+                    console.log('attempting addRoom fetch with image');
+                    response = await fetch('admin/addRoom', {
+                        method: 'POST',
+                        body: formData // Use FormData instead of JSON
+                    });
+                }
+                
+                // Refresh room data
+                this.$dispatch('refresh-room-data');
+                console.log("response is this:", response);
+                const result = await response.json();
+                console.log("Server response:", result);
+                  
+                if (result.success) {
+                    this.hasError = false;
+                    this.message = result.message || (this.formData.id === null ? 'Room added successfully' : 'Room updated successfully!');
                     
-                    if (result.success) {
-                        this.message = 'Room deleted successfully!';
-                        this.hasError = false;
+                    // Close the modal after success
+                    setTimeout(() => {
+                        this.showCrudModal = false;
+                    }, 2000); // Close after 2 seconds so the user can see the success message
+                } else {
+                    this.hasError = true;
+                    this.errors = result.errors || {};
+                    this.message = result.message || 'An error occurred';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                this.hasError = true;
+                this.message = 'An error occurred while updating the room.';
+            } finally {
+                //this.isSubmitting = false;
+            }
+        },
+        
+        // Other methods (openDeleteModal, confirmDelete) remain the same
+        openDeleteModal(roomId) {
+            this.roomToDelete = roomId;
+            this.showDeleteModal = true;
+        },
 
-                        // Refresh room data instead of pushing directly
-                        this.$dispatch('refresh-room-data');
+        async confirmDelete() {
+            // Existing delete functionality
+            if (!this.roomToDelete) return;
+            
+            try {
+                const response = await fetch(`admin/deleteRoomById/${this.roomToDelete}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    this.message = 'Room deleted successfully!';
+                    this.hasError = false;
 
-                      // Close the modal after success
-                      setTimeout(() => {
+                    // Refresh room data
+                    this.$dispatch('refresh-room-data');
+
+                    // Close the modal after success
+                    setTimeout(() => {
                         this.showDeleteModal = false;
                         this.roomToDelete = null;
-                      }, 2000); // Close after 2 seconds so the user can see the success message
-                    } else {
-                        this.message = result.message || 'An error occurred while deleting the room.';
-                        this.hasError = true;
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                    this.message = 'An error occurred while deleting the room.';
+                    }, 2000);
+                } else {
+                    this.message = result.message || 'An error occurred while deleting the room.';
                     this.hasError = true;
                 }
+            } catch (error) {
+                console.error('Error:', error);
+                this.message = 'An error occurred while deleting the room.';
+                this.hasError = true;
             }
-        }));
-    });
+        }
+    }));
+});
 </script>
 
 <?php include 'partials/footer.view.php' ?>
