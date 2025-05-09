@@ -1,0 +1,24 @@
+<?php
+
+//example config file.  If you use the hot_dbinit executable to initialise the database, the DBNAME will be 'hot'.  
+//Amend the other details, rename this file to config.php and move it to the app/core directory
+
+// Database config
+
+define('DBNAME', 'hot');
+define('DBHOST', 'localhost');
+define('DBUSER', 'root');
+define('DBPASS', 'MyDatabasePassword123');
+
+// Website root for assets (images, css, js)
+
+define('ROOT', 'http://myappurl.net');
+
+// website name and description
+
+define('APP_NAME', "My Sandbox");
+define('APP_DESC', "Default edit me");
+
+// debug mode turn on while developing, off in production
+
+define('DEBUG_MODE', true);
