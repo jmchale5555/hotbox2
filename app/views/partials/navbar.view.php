@@ -73,8 +73,8 @@
                                               } ?> block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-purple-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">FAQ</a>
           </li>
           <li>
-            <a href="<?= ROOT ?>/contact" class="<?php $URL = URL(0);
-                                                  if ($URL === "contact")
+            <a href="<?= ROOT ?>/password" class="<?php $URL = URL(0);
+                                                  if ($URL === "password")
                                                   {
                                                     echo "md:dark:text-purple-500 ";
                                                   }
