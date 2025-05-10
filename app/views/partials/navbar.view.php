@@ -72,17 +72,20 @@
                                                 echo "dark:text-white ";
                                               } ?> block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-purple-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">FAQ</a>
           </li>
-          <li>
-            <a href="<?= ROOT ?>/contact" class="<?php $URL = URL(0);
-                                                  if ($URL === "contact")
-                                                  {
-                                                    echo "md:dark:text-purple-500 ";
-                                                  }
-                                                  else
-                                                  {
-                                                    echo "dark:text-white ";
-                                                  } ?> block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-purple-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Contact</a>
-          </li>
+
+          <?php if(isset($_SESSION['USER'])): ?>
+            <li>
+            <a href="<?= ROOT ?>/resetpassword" class="<?php $URL = URL(0);
+                                              if ($URL === "resetpassword")
+                                              {
+                                                echo "md:dark:text-purple-500 ";
+                                              }
+                                              else
+                                              {
+                                                echo "dark:text-white ";
+                                              } ?> block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-purple-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Reset Password</a>
+            </li>
+          <?php endif; ?> 
           <?php if (!empty($_SESSION['USER'])) : ?>
             <li>
               <a href="<?= ROOT ?>/logout" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-purple-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Logout</a>
