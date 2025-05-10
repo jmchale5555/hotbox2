@@ -260,7 +260,7 @@ document.addEventListener('alpine:init', () => {
             if (!file) return;
             
             this.imageFile = file;
-            
+
             // Create preview
             const reader = new FileReader();
             reader.onload = (e) => {

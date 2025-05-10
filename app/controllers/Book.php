@@ -45,6 +45,17 @@ class Book
         $this->view('book', $data);
     }
 
+    public function getImgByRoomId($room_id)
+    {
+      
+      $roomId = $room_id;
+      $rooms = new Room;
+      $selectedRoom = $rooms->where(['id' => $roomId], [], []);
+      $roomObject = $selectedRoom[0];
+      $selectedImg = $roomObject->room_image;
+      echo json_encode($selectedImg);
+    }
+
     public function getDeskByRoomId($room_id)
     {
         $selectedDesks = [];

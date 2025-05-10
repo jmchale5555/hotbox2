@@ -40,9 +40,20 @@
 
         async handleGetDesksAndBookings(roomId) {
             this.selectedRoomId = roomId;
-
+            this.formData.desk_id = '';
+            await this.getImg(roomId);
             await this.getDesks(roomId);
             await this.getBookings(roomId);
+        },
+
+        async getImg(roomId) {
+          const response = await fetch(`book/getImgByRoomId/${roomId}`);
+          if(response.status !== 200) {
+            (response) => console.log(response);
+          } else {
+            this.img = await response.json();
+            this.selectedImg = this.img;
+          }
         },
 
         async getDesks(roomId) {
@@ -122,7 +133,7 @@
 
 
         }" class="flex flex-row space-x-3">
-       
+
             <!-- Room and Desk Selection -->
             <div class="w-2/5 gap-1 mt-8 bg-slate-200 dark:bg-slate-800 p-6 rounded-lg">
                 <!-- Rooms dropdown -->
@@ -157,6 +168,7 @@
                     </select>
                 </div>
             </div>
+
 
             <!-- Date picker -->
       <div x-show="showDatePicker">
@@ -210,11 +222,17 @@
                         </template>
                     </div>
                 </div>
-
             </div>
         </div>
     </form>
+  <template x-if="formData.desk_id !== '...' && formData.desk_id !== ''" >
+    <div class="min-w-max grid grid-cols-3 bg-slate-200 dark:bg-slate-800 rounded-lg">
+    <img :src="selectedImg" class="col-start-2 py-6">
+    </div>
+  </template>
+
 </div>
+
 
 <script>
 
@@ -231,6 +249,7 @@
             isSubmitting: false,
             showDeleteModal: false,
             bookingToDelete: null,
+            selectedImg: null,
             bookings: [],
 
             openDeleteModal(bookingId) {

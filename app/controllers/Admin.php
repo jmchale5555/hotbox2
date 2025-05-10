@@ -214,7 +214,8 @@ class Admin
         }
         
         // Generate unique filename
-        $filename = uniqid() . '_' . time() . '_' . $file['name'];
+        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+        $filename = uniqid() . '_' . time() . '.' . $extension;
         $upload_file = $upload_path . $filename;
         
         // Move the uploaded file
