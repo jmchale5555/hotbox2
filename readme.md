@@ -4,6 +4,8 @@ This is a simple hotdesk booking system that will allow you to make hotdesks boo
 
 Admin users see an additional admin panel where they can add rooms, change the number of hotdesks in a room or add/update the floor plan.
 
+There's a binary which can be run to set up the database called hot_dbinit and I've left the source code there in the project root in file hot.c/
+
 Suprisingly, github is not too smart and doesn't recognise that so much of this code is Javascript / Alpine js.  It seems all it does is look at the file extensions (but it recognised the CSS so...).  If you look at my view files under app/views, there's very little PHP, they're like 98% JS/CSS/HTML but there you go.  Github doesn't see the javascript for some reason.  
 
 ![alt text](https://github.com/jmchale5555/sbox2/blob/master/screenshotG.jpg?raw=true "Hotdesk Booking System Screenshot")
