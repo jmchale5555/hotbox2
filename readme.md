@@ -6,7 +6,7 @@ Admin users see an additional admin panel where they can add rooms, change the n
 
 There's a binary which can be run to set up the database called hot_dbinit and I've left the source code there in the project root in file hot.c
 
-There were a few interesting problems and choices along the way.  I opted to reset the view if oyu change room,  it could have switched to the same desk in a different room reliably, but I feel the end user would lose confidence in what was happening / being displayed, so forcing them to re-select a desk feels more solid. 
+There were a few interesting problems and choices along the way.  I opted to reset the view if you change room,  it could have switched to the same desk in a different room reliably, but I feel the end user would lose confidence in what was happening / being displayed, so forcing them to re-select a desk before the booking slots reappear feels more solid and intuative.
 
 Suprisingly, github is not too smart and doesn't recognise that so much of this code is Javascript / Alpine js.  It seems all it does is look at the file extensions (but it recognised the CSS so...).  If you look at my view files under app/views, there's very little PHP, they're like 98% JS/CSS/HTML but there you go.  Github doesn't see the javascript for some reason.  
 
