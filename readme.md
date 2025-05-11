@@ -6,7 +6,7 @@ Suprisingly, github is not too smart and doesn't recognise that so much of this 
 
 ![alt text](https://github.com/jmchale5555/sbox2/blob/master/screenshotG.jpg?raw=true "Hotdesk Booking System Screenshot")
 
-Hotdesk Booking System Quick Start Guide
+## Hotdesk Booking System Quick Start Guide
 
 1. Clone repository.
 2. Set up webserver with repo's public folder as document root.  
