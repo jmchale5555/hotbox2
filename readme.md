@@ -2,9 +2,9 @@ Hotdesk Booking System Quick Start Guide
 
 1. Clone repository
 2. Set up webserver with repo's public folder as document root
-3. as usual with web, use chmod to grant ownership of the project folder to the webserver and a group that includes the user that will be running commands (in my case root).  example: chmod apache:root <projectfoldername>.  Check that the webserver user (apache/www-data) has rwx permissions to project recursively.
+3. Usual web server stuff, use chmod to grant ownership of the project folder to the webserver and a group that includes the user that will be running commands (in my case root).  example: chmod apache:root <projectfoldername>.  Check that the webserver user (apache/www-data) has rwx permissions to project recursively.
 4. Install Mysql or Maradb
-5. Copy config.php.example from root folder to app/core and rename config.php
+5. Copy config.php.example from project root folder to app/core and rename config.php
 6. Edit config.php, leave the DBNAME as hot and enter your DB password and ROOT URL.  You can have different DB user and host if necessary but defaults are good.
 7. Run command 'npm install' from project root to install required node modules
 8. Run command 'hot_dbinit' to set up the database.  If you want to use a database user other than root and/or a hostname other than localhost, add -h command argument to see how
