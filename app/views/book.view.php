@@ -171,9 +171,9 @@
 
 
             <!-- Date picker -->
-      <div x-show="showDatePicker">
-         <div class="bg-white border-gray-200 dark:bg-gray-900 shadow-md md:justify-center mx-auto px-2 text-blue-800 dark:text-blue-300 text-sm mb-2 rounded-sm text-center text-xl">Desk:  <span x-html="formData.desk_id"></span></div>
-              <div class="flex flex-wrap bg-slate-200 dark:bg-slate-700 shadow-md md:justify-center mx-auto py-4 px-2 rounded-lg">
+            <div x-show="showDatePicker">
+                <div class="bg-white border-gray-200 dark:bg-gray-900 shadow-md md:justify-center mx-auto px-2 text-blue-800 dark:text-blue-300 text-sm mb-2 rounded-sm text-center text-xl">Desk: <span x-html="formData.desk_id"></span></div>
+                <div class="flex flex-wrap bg-slate-200 dark:bg-slate-700 shadow-md md:justify-center mx-auto py-4 px-2 rounded-lg">
                     <template x-for="value in dates">
                         <div class="flex outline group hover:bg-slate-300 dark:hover:bg-slate-600 hover:shadow-lg hover-dark-shadow rounded-lg mx-8 my-2 transition-all duration-300 cursor-pointer justify-center w-28"
                             :class="{ 'bg-indigo-900 hover:!bg-indigo-900': isSlotBooked(parseDateUnix(value)) }">
@@ -225,17 +225,16 @@
             </div>
         </div>
     </form>
-  <template x-if="formData.desk_id !== '...' && formData.desk_id !== ''" >
-    <div class="min-w-max grid grid-cols-3 bg-slate-200 dark:bg-slate-800 rounded-lg">
-    <img :src="selectedImg" class="col-start-2 py-6">
-    </div>
-  </template>
+    <template x-if="formData.desk_id !== '...' && formData.desk_id !== ''">
+        <div class="min-w-max grid grid-cols-3 bg-slate-200 dark:bg-slate-800 rounded-lg">
+            <img :src="selectedImg" height="300" width="400" class="col-start-2 py-6">
+        </div>
+    </template>
 
 </div>
 
 
 <script>
-
     document.addEventListener('alpine:init', () => {
         Alpine.data('bookingForm', () => ({
             formData: {
@@ -275,7 +274,7 @@
                     this.hasError = true;
                 }
             },
-  
+
             async deleteBooking(bookingId) {
                 const response = await fetch(`book/deleteBookingById/${bookingId}`);
                 if (!response.ok) {
