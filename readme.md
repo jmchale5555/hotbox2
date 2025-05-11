@@ -1,15 +1,21 @@
+# Welcome to Hotdesk Booking System without name (yet)
+
+This is a simple hotdesk booking system that will allow you to make hotdesks any number of rooms or locations bookable.  I started this hobby project as I thought it would be an interesting challange and learning experience.  Rather than making another boring CRUD application I wanted to make something that displays booking slots and shows you which slots are booked by whom and allows you to book a slot if it's free in a single page application manner.  The main idea was for it to be interactive without form fields and date pickers just select a slot and book it or cancel slots that were booked by yourself.  It's using Alpine JS to make AJAX requests to get that native app, SPA feel.
+
+Suprisingly, github is not too smart and doesn't recognise that so much of this code is Javascript / Alpine js.  It seems all it does is look at he file extensions(but it recognised the CSS so...).  If you look at my view files under app/views, there's very little PHP, they're like 98% JS/CSS/HTML but there you go.  Github doesn't see the javascript for some reason.  
+
 ![alt text](https://github.com/jmchale5555/sbox2/blob/master/screenshotG.jpg?raw=true "Hotdesk Booking System Screenshot")
 
 Hotdesk Booking System Quick Start Guide
 
-1. Clone repository
+1. Clone repository.
 2. Set up webserver with repo's public folder as document root.  
 3. Install PHP 8.2 or higher. See guidenotes https://www.fadocodecamp.com/posts/installing-php-on-linux
-4. Usual web server stuff, use chmod to grant ownership of the project folder to the webserver and a group that includes the user that will be running commands (in my case root).  example: chmod apache:root <projectfoldername>.  Check that the webserver user (apache/www-data) has rwx permissions to project recursively.
-5. Install Mysql or Maradb
-6. Copy config.php.example from project root folder to app/core and rename config.php
+4. Usual web server stuff, use chmod to grant ownership of the project folder to the webserver and a group that includes the user that will be running commands (in my case root).  example: `chmod -R apache:root projectfoldername`.  Check that the webserver user (apache/www-data) has rwx permissions to project recursively.
+5. Install Mysql or Maradb.
+6. Copy config.php.example from project root folder to app/core and rename config.php.
 7. Edit config.php, leave the DBNAME as hot and enter your DB password and ROOT URL.  You can have different DB user and host if necessary but defaults are good.
-8. Run command 'npm install' from project root to install required node modules
-9. Run command 'hot_dbinit' to set up the database.  If you want to use a database user other than root and/or a hostname other than localhost, add -h command argument to see how
+8. Run command `npm install` from project root to install required node modules.
+9. Run command `hot_dbinit` to set up the database.  If you want to use a database user other than root and/or a hostname other than localhost, add -h argument to see how to set those `hot_dbinit -h`.
 10. There will be an initial admin user set up with email: admin@null.local and password 'pavlova'.  You should log in with this and change the password from the navbar menu option.
-11. You can now start registering users and adding rooms to the system, giving total number of hotdesk and an optional desk plan image for each room.
+11. You can now start registering users and adding rooms to the system, setting total number of hotdesks and an optional desk plan image for each room.
