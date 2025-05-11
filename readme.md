@@ -2,9 +2,9 @@
 
 This is a simple hotdesk booking system that will allow you to make hotdesks bookable in any number of rooms or locations.  I started this hobby project as I thought it would be an interesting challange and learning experience.  Rather than making another boring CRUD application, I wanted to make something that displays booking slots, shows you which slots are booked by whom and allows you to book a slot if it's free in a modern, SPA style.  The main idea was for it to be interactive without loads of form fields and date pickers, just select a slot and book it or cancel slots that were booked by yourself.  It's using Alpine JS to make AJAX requests to get that native app, SPA feel.
 
-Admin users see an additional admin panel where they can add rooms, change the number of hotdesks in a room or add/update the floor plan.
+Admin users see an additional admin panel where they can add rooms, change the number of hotdesks in a room or add/update the floor plan.  It uses Tailwind and supports both light and dark mode depending on your system / browser setting.
 
-There's a binary which can be run to set up the database called hot_dbinit and I've left the source code there in the project root in file hot.c/
+There's a binary which can be run to set up the database called hot_dbinit and I've left the source code there in the project root in file hot.c
 
 Suprisingly, github is not too smart and doesn't recognise that so much of this code is Javascript / Alpine js.  It seems all it does is look at the file extensions (but it recognised the CSS so...).  If you look at my view files under app/views, there's very little PHP, they're like 98% JS/CSS/HTML but there you go.  Github doesn't see the javascript for some reason.  
 
