@@ -1,3 +1,5 @@
+![alt text](https://github.com/jmchale5555/sbox2/blob/master/screenshotG.jpg?raw=true "Hotdesk Booking System Screenshot")
+
 Hotdesk Booking System Quick Start Guide
 
 1. Clone repository
