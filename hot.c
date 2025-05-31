@@ -4,8 +4,11 @@
  * This program connects to MySQL/MariaDB, creates a database called 'hot',
  * and sets up tables for bookings, images, rooms, and users.
  * 
+ * ensure you have installed all libraries such as mysql and libsoium
+ * sudo apt install libsodium-dev
+ * 
  * Compile with:
- * gcc -o setup_db setup_db.c $(mysql_config --cflags --libs)
+ * gcc -o hot_dbinit hot.c $(mysql_config --cflags --libs) -lsodium
  */
 
 #include <stdio.h>
@@ -26,7 +29,7 @@ const char* create_tables[] = {
     "  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,"
     "  `room_name` varchar(255) NOT NULL,"
     "  `desk_total` int(11) DEFAULT NULL,"
-    "  `created_at` timestamp NULL DEFAULT NULL,"
+    "  `created_at` timestamp NULL DEFAULT current_timestamp(),"
     "  `updated_at` timestamp NULL DEFAULT NULL,"
     "  `room_image` varchar(255) DEFAULT NULL,"
     "  PRIMARY KEY (`id`)"
@@ -36,8 +39,8 @@ const char* create_tables[] = {
     "CREATE TABLE IF NOT EXISTS `users` ("
     "  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,"
     "  `name` varchar(255) DEFAULT NULL,"
-    "  `email` varchar(255) NOT NULL,"
-    "  `email_verified_at` timestamp NULL DEFAULT NULL,"
+    "  `username` varchar(255) NOT NULL,"
+    "  `username_verified_at` timestamp NULL DEFAULT current_timestamp(),"
     "  `password` varchar(255) NOT NULL,"
     "  `two_factor_secret` text DEFAULT NULL,"
     "  `two_factor_recovery_codes` text DEFAULT NULL,"
@@ -45,13 +48,13 @@ const char* create_tables[] = {
     "  `remember_token` varchar(100) DEFAULT NULL,"
     "  `current_team_id` bigint(20) unsigned DEFAULT NULL,"
     "  `profile_photo_path` varchar(2048) DEFAULT NULL,"
-    "  `created_at` timestamp NULL DEFAULT NULL,"
+    "  `created_at` timestamp NULL DEFAULT current_timestamp(),"
     "  `updated_at` timestamp NULL DEFAULT NULL,"
     "  `guid` varchar(255) DEFAULT NULL,"
     "  `domain` varchar(255) DEFAULT NULL,"
     "  `is_admin` tinyint(1) DEFAULT NULL,"
     "  PRIMARY KEY (`id`),"
-    "  UNIQUE KEY `users_email_unique` (`email`),"
+    "  UNIQUE KEY `users_username_unique` (`username`),"
     "  UNIQUE KEY `users_guid_unique` (`guid`)"
     ") ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
 
@@ -194,7 +197,7 @@ int main(int argc, char *argv[]) {
 
     // Admin credentials
     char admin_name[] = "admin";
-    char admin_email[] = "admin@null.local";
+    char admin_username[] = "admin";
     char admin_password[] = "pavlova";
     char hashed_password[crypto_pwhash_STRBYTES];
 
@@ -208,8 +211,8 @@ int main(int argc, char *argv[]) {
     // Construct SQL query
     char query[512];
     snprintf(query, sizeof(query),
-             "INSERT INTO users (name, email, password, is_admin) VALUES ('%s', '%s', '%s', 1)",
-             admin_name, admin_email, hashed_password);
+             "INSERT INTO users (name, username, password, is_admin) VALUES ('%s', '%s', '%s', 1)",
+             admin_name, admin_username, hashed_password);
 
     // Execute query
     if (execute_query(conn, query)) {

@@ -1,6 +1,8 @@
 <?php
 
 namespace Model;
+use LdapRecord\Models\ActiveDirectory\Entry;
+use LdapRecord\Models\ActiveDirectory\Scopes\RejectComputerObjectClass;
 
 class User
 {
@@ -11,7 +13,7 @@ class User
 
     protected $allowedColumns = [
         'name',
-        'email',
+        'username',
         'password',
     ];
 
@@ -24,15 +26,11 @@ class User
             $this->errors['name'] = "Name is required";
         }
         else
-        if (empty($data['email']))
+        if (empty($data['username']))
         {
-            $this->errors['email'] = "Email is required";
+            $this->errors['username'] = "Username is required";
         }
-        else
-        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL))
-        {
-            $this->errors['email'] = "Enter a valid email address";
-        }
+
 
         if (empty($data['password']))
         {

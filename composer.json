@@ -1,5 +1,7 @@
 {
     "require": {
-        "nesbot/carbon": "^3.8"
+        "nesbot/carbon": "^3.8",
+        "directorytree/ldaprecord": "^3.8",
+        "firebase/php-jwt": "^6.11"
     }
 }
