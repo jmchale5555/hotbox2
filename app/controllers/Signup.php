@@ -2,7 +2,7 @@
 
 namespace Controller;
 
-use Model\User;
+use Model\LocalUser;
 use Core\Request;
 
 defined('ROOTPATH') or exit('Access Denied');
@@ -22,7 +22,7 @@ class Signup
         if ($req->posted())
         {
 
-            $user = new User;
+            $user = new LocalUser;
             if ($user->validate($req->post()))
             {
                 // unset($req->post('confirm'));
