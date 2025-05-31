@@ -4,8 +4,8 @@ namespace Controller;
 
 $ldapCreds = [
     // Mandatory Configuration Options
-    'hosts'            => ['AD-DC-SL02.ad.ucl.ac.uk'],
-    'base_dn'          => 'DC=ad,DC=ucl,DC=ac,DC=uk',
+    'hosts'            => ['MY-LDAPSERVER.EXAMPLE.CO.UK'],
+    'base_dn'          => 'DC=ad,DC=example,DC=co,DC=uk',
 
     // Optional Configuration Options
     'port'             => 389,
