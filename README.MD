@@ -1,5 +1,4 @@
 # Hotdesk Booking System 
-## (HOBBY PROJECT copied the idea from inside UCL.  Nothing to do with EEE)
 
 This is a simple hotdesk booking system that will allow you to make hotdesks bookable in any number of rooms or locations. It uses PHP server side and Alpine JS for UI and AJAX requests.
 
