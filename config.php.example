@@ -10,6 +10,9 @@ define('DBHOST', 'localhost');
 define('DBUSER', 'root');
 define('DBPASS', 'MyDatabasePassword123');
 
+// LDAP configs
+define('USER_DN', 'OU=ABC,OU=DEF,OU=Accounts,DC=ad,DC=example,DC=co,DC=uk')
+
 // Website root for assets (images, css, js)
 
 define('ROOT', 'http://myappurl.net');

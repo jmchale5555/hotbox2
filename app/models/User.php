@@ -15,6 +15,7 @@ class User
         'name',
         'username',
         'password',
+        'domain',
     ];
 
     public function validate($data)

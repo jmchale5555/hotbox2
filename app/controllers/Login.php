@@ -30,7 +30,7 @@ class Login
             Container::addConnection($connection);
             $connection->connect();
 
-            echo "Successfully connected!";
+            // echo "Successfully connected!";
         } catch (\LdapRecord\Auth\BindException $e) {
             $error = $e->getDetailedError();
 
@@ -54,26 +54,33 @@ class Login
                 {
                     $session = new Session;
                     $session->auth($row);
-                    redirect('book');
+
                 }
             }
 
             //otherwise check if the credentials can authenticate against LDAP
-            if ($connection->auth()->attempt("CN=".$_POST['username'].",OU=EENG,OU=ENG,OU=Accounts,DC=ad,DC=ucl,DC=ac,DC=uk", $_POST['password'], $stayAuthenticated = true) == true)
+            if ($connection->auth()->attempt("CN=".$_POST['username'].",".USER_DN, $_POST['password'], $stayAuthenticated = true) == true)
             {
                 //if authentication suceeded, pull the user's name out of LDAP and create a row in the users table for them
                 $ldapUser = User::whereStartsWith('CN', $_POST['username'])->select('displayname')->first();
+                // dd($ldapUser);
                 $hashed_password = password_hash($req->post('password'), PASSWORD_BCRYPT);
                 $req->set('password', $hashed_password);
                 $req->set('created_at', date("Y-m-d H:i:s"));
                 $req->set('is_admin', 0);
                 $req->set('name', $ldapUser->displayname[0]);
+                $req->set('domain', 'LDAP');
+                if($row)
+                {
+                $user->update($row->id, $req->post());
+                } else 
+                {
                 $user->insert($req->post());
-
+                }
 
             $data['errors'] = $user->errors;
             
-            //now we'll need to re-check the users table and put the user in the session
+            //now we'll need to re-check the users table and put the user in to the session
             $newLdaprow = $user->first($arr);
 
             if($newLdaprow) {
@@ -82,10 +89,11 @@ class Login
                 redirect('book');
                 }
             }
-            $user->errors['email'] = "Wrong username or password";
+            
+            $user->errors['username'] = "Wrong username or password";
 
             $data['errors'] = $user->errors;
-        
+            
         }
     //display the login view with associated data
     $this->view('login', $data);

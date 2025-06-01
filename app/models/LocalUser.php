@@ -16,6 +16,7 @@ class LocalUser
         'username',
         'password',
         'is_admin',
+        'domain',
     ];
 
     public function validate($data)
