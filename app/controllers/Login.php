@@ -54,7 +54,7 @@ class Login
                 {
                     $session = new Session;
                     $session->auth($row);
-
+                    redirect('book');
                 }
             }
 
