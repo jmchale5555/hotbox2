@@ -80,7 +80,7 @@ class Login
 
             $data['errors'] = $user->errors;
             
-            //now we'll need to re-check the users table and put the user in to the session
+            //now re-check the user exists in the users table and put them in to the session
             $newLdaprow = $user->first($arr);
 
             if($newLdaprow) {

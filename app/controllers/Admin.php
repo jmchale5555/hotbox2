@@ -57,7 +57,7 @@ class Admin
             }
         }
         
-        // Return a proper response
+        // Return a response
         if(empty($room->errors)) {
             echo json_encode(['success' => true, 'message' => 'Room deleted successfully']);
         } else {
