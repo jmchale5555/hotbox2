@@ -20,7 +20,7 @@ class Login
 
     public function index()
     {
-        require '/var/www/ad/app/core/auth.php';
+        require '../app/core/auth.php';
 
         $data = [];
 
