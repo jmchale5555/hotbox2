@@ -1,0 +1,67 @@
+services:
+  mariadb:
+    build:
+      context: .
+      dockerfile: Dockerfile.mariadb
+    container_name: project_mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: hot
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_password
+      MYSQL_ROOT_HOST: '%'
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - .:/root
+      - ./database/init:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    networks:
+      - app_network
+
+  # PHP-FPM Service
+  php-fpm:
+    build:
+      context: .
+      dockerfile: Dockerfile.php-fpm
+    container_name: project_php_fpm
+    restart: unless-stopped
+    volumes:
+      - .:/var/www/html
+      - ./vendor:/var/www/html/vendor
+    depends_on:
+      - mariadb
+    networks:
+      - app_network
+    environment:
+      - PHP_MEMORY_LIMIT=512M
+      - PHP_UPLOAD_MAX_FILESIZE=100M
+      - PHP_POST_MAX_SIZE=100M
+      - PHP_MAX_EXECUTION_TIME=300
+
+# Nginx Service
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    container_name: project_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - .:/var/www/html
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - php-fpm
+    networks:
+      - app_network
+
+volumes:
+  mariadb_data:
+
+networks:
+  app_network:
+    driver: bridge

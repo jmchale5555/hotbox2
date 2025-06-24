@@ -1,4 +1,5 @@
 # Hotdesk Booking System 
+## (HOBBY PROJECT copied the idea from inside UCL.  Nothing to do with EEE)
 
 This is a simple hotdesk booking system that will allow you to make hotdesks bookable in any number of rooms or locations. It uses PHP server side and Alpine JS for UI and AJAX requests.
 
@@ -11,13 +12,15 @@ There's a binary which can be run to set up the database called hot_dbinit and I
 ## Hotdesk Booking System Quick Start Guide
 
 1. Clone repository.
-2. Set up webserver with repo's public folder as document root.  
-3. Install PHP 8.2 or higher. See guidenotes https://www.fadocodecamp.com/posts/installing-php-on-linux
-4. Usual web server stuff, use chmod to grant ownership of the project folder to the webserver and a group that includes the user that will be running commands (in my case root).  example: `chmod -R apache:root projectfoldername`.  Check that the webserver user (apache/www-data) and the user you're running commands as has rwx permissions to project directory recursively.
-5. Install Mysql or Mariadb.
-6. Copy config.php.example from project root folder to app/core and rename config.php.
-7. Edit config.php, leave the DBNAME as hot and enter your DB password and ROOT URL.  You can have different DB user and host if necessary but defaults are good.  To enable LDAP auth, enter the domain name of your users container, as the example shows.
-8. Run command `npm install` from project root to install required node modules.
-9. Run command `hot_dbinit` to set up the database.  If you want to use a database user other than root and/or a hostname other than localhost, add -h argument to see how to set those `hot_dbinit -h`.
-10. There will be an initial admin user set up with email: admin@null.local and password 'pavlova'.  You should log in with this and change the password from the navbar menu option.
-11. You can now start registering users and adding rooms to the system, setting total number of hotdesks and an optional desk plan image for each room.
+2. Install Node js and run the following command from project root: npm install
+3. Copy config.php.example from project root folder to app/core and rename config.php.
+4. Edit config.php, leave the DBNAME as hot and enter your DB password and ROOT URL. You can have different DB user and host if necessary but defaults are good. To enable LDAP auth, enter the domain name of your users container, as the example shows.
+5. Make sure you have Docker Engine and Docker Compose installed.  Docker Desktop will give you those plus a load of other stuff. 
+6. From the root of the repo: sudo docker compose up --build -d
+7. Once docker compose has finished building containers, type: sudo docker ps
+8. You should see 3 containers and their ID, copy the container ID for the MariaDB container.
+9. Run command: sudo docker exec `<mariadbContainerId>` /usr/local/bin/db-init
+10. This will create the database, schema and initial admin user for the system
+11. Now visit your host machine in a web browser and it will be serving the Hot Desk booking system.
+12. Hit Login, there will be an initial admin user set up with username: 'admin' and password: 'pavlova'.  You should log in with this and reset the password from the navbar menu option.
+13. You can now start registering users and adding rooms to the system, setting total number of hotdesks and an optional desk plan image for each room.

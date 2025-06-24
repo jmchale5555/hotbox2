@@ -1,0 +1,83 @@
+FROM php:8.3-fpm
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libcurl4-openssl-dev \
+    libldap2-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libwebp-dev \
+    libfreetype6-dev \
+    libonig-dev \
+    libxml2-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+# Configure GD with modern image support
+RUN docker-php-ext-configure gd \
+    --with-freetype \
+    --with-jpeg \
+    --with-webp
+
+# Install PHP extensions (GD provides most image manipulation needs)
+RUN docker-php-ext-install -j8 \
+    pdo \
+    pdo_mysql \
+    gd \
+    mbstring \
+    exif \
+    pcntl \
+    bcmath \
+    curl \
+    fileinfo \
+    intl \
+    ldap \
+    zip \
+    opcache
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Copy composer files first for better caching
+COPY composer.json composer.lock* ./
+
+# Install Composer dependencies
+RUN composer install --no-dev --optimize-autoloader --no-interaction || true
+
+# Copy the rest of the application
+COPY . .
+
+# handles user mapping
+COPY phpentrypoint.sh /phpentrypoint.sh
+RUN chmod +x /phpentrypoint.sh
+
+# PHP-FPM configuration for file uploads and performance
+RUN echo '[www]' > /usr/local/etc/php-fpm.d/uploads.conf \
+    && echo 'php_admin_value[upload_max_filesize] = ${PHP_UPLOAD_MAX_FILESIZE}' >> /usr/local/etc/php-fpm.d/uploads.conf \
+    && echo 'php_admin_value[post_max_size] = ${PHP_POST_MAX_SIZE}' >> /usr/local/etc/php-fpm.d/uploads.conf \
+    && echo 'php_admin_value[memory_limit] = ${PHP_MEMORY_LIMIT}' >> /usr/local/etc/php-fpm.d/uploads.conf \
+    && echo 'php_admin_value[max_execution_time] = ${PHP_MAX_EXECUTION_TIME}' >> /usr/local/etc/php-fpm.d/uploads.conf \
+    && echo 'php_admin_value[max_input_time] = ${PHP_MAX_EXECUTION_TIME}' >> /usr/local/etc/php-fpm.d/uploads.conf
+
+# Enable OPcache for better performance
+RUN echo 'opcache.enable=1' >> /usr/local/etc/php/conf.d/opcache.ini \
+    && echo 'opcache.memory_consumption=128' >> /usr/local/etc/php/conf.d/opcache.ini \
+    && echo 'opcache.interned_strings_buffer=8' >> /usr/local/etc/php/conf.d/opcache.ini \
+    && echo 'opcache.max_accelerated_files=4000' >> /usr/local/etc/php/conf.d/opcache.ini \
+    && echo 'opcache.revalidate_freq=2' >> /usr/local/etc/php/conf.d/opcache.ini \
+    && echo 'opcache.fast_shutdown=1' >> /usr/local/etc/php/conf.d/opcache.ini
+
+# Expose port 9000 for PHP-FPM
+EXPOSE 9000
+
+ENTRYPOINT ["/phpentrypoint.sh"]
+
+CMD ["php-fpm"]

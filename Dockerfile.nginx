@@ -1,0 +1,14 @@
+FROM nginx:alpine
+
+# update and install bash
+RUN apk update && apk add bash
+
+# Install shadow for usermod/groupmod
+RUN apk add --no-cache shadow
+
+# Copy entrypoint that handles user mapping
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]

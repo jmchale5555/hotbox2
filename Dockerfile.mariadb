@@ -1,0 +1,11 @@
+FROM mariadb:11.2
+
+RUN apt-get update && apt-get install -y libsodium-dev
+
+# Copy your executable to the container
+COPY ./hot_dbinit /usr/local/bin/db-init
+RUN chmod +x /usr/local/bin/db-init
+
+
+# Set the socket path in MariaDB configuration
+# RUN echo "[mysqld]\nsocket=/var/run/mysqld/mysql.sock\nbind-address=0.0.0.0" > /etc/mysql/conf.d/custom-my.cnf
