@@ -14,7 +14,7 @@ There's a binary which can be run to set up the database called hot_dbinit and I
 1. Clone repository.
 2. Install Node js and run the following command from project root: npm install
 3. Copy config.php.example from project root folder to app/core and rename config.php.
-4. Edit config.php, leave the DBNAME as hot and enter your DB password and ROOT URL. You can have different DB user and host if necessary but defaults are good. To enable LDAP auth, enter the domain name of your users container, as the example shows.
+4. Edit config.php, leave the DBNAME as hot.  If using docker the DBHOST is mariadb and initial DB password is 'rootpassword'. Set ROOT URL to your machine's name or http://localhost. For production you'll need to set different DB user and host by using a docker exec command and you can turn debug more off in this file, but defaults are good for trialing. To enable LDAP auth, enter the domain name of your users container, as the example shows.
 5. Make sure you have Docker Engine and Docker Compose installed.  Docker Desktop will give you those plus a load of other stuff. 
 6. From the root of the repo: sudo docker compose up --build -d
 7. Once docker compose has finished building containers, type: sudo docker ps

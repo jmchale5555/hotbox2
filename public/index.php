@@ -1,10 +1,8 @@
-
-
 <?php
 
-require '../vendor/autoload.php';
-
 session_start();
+
+require '../vendor/autoload.php';
 
 /**  Valid PHP Version? **/
 $minPHPVersion = '8.0';
