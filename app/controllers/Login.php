@@ -88,7 +88,7 @@ class Login
 
             if($ldapSettings['ldap_enabled']) {
             //otherwise check if the credentials can authenticate against LDAP
-                if ($connection->auth()->attempt("CN=".$_POST['username'].",".USER_DN, $_POST['password'], $stayAuthenticated = true) == true)
+                if ($connection->auth()->attempt("CN=".$_POST['username'].",".$ldapSettings["ldap_user_dn"], $_POST['password'], $stayAuthenticated = true) == true)
                 {
                     //if authentication suceeded, pull the user's name out of LDAP and create a row in the users table for them
                     $ldapUser = User::whereStartsWith('CN', $_POST['username'])->select('displayname')->first();
