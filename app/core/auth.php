@@ -2,10 +2,15 @@
 
 namespace Controller;
 
+$ldapEnabled = 0;
+
 $ldapCreds = [
     // Mandatory Configuration Options
-    'hosts'            => ['MY-LDAPSERVER.EXAMPLE.CO.UK'],
-    'base_dn'          => 'DC=ad,DC=example,DC=co,DC=uk',
+    'hosts'            => ['AD-DC-SL02.ad.ucl.ac.uk'],
+    'base_dn'          => 'DC=ad,DC=ucl,DC=ac,DC=uk',
+    // 'username'         => 'CN=EENGuceemj2,OU=Administrators,OU=Administration,DC=ad,DC=ucl,DC=ac,DC=uk',
+    // 'password'         => '',
+    
 
     // Optional Configuration Options
     'port'             => 389,

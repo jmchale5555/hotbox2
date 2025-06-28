@@ -84,7 +84,19 @@ const char* create_tables[] = {
     "  KEY `images_room_id_foreign` (`room_id`) USING BTREE,"
     "  CONSTRAINT `images_ibfk_1` FOREIGN KEY (`room_id`)"
     "  REFERENCES `rooms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE"
-    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci"
+    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci",
+
+    // Create settings table for storing application configuration
+    "CREATE TABLE IF NOT EXISTS `settings` ("
+    "  `id` int(11) NOT NULL AUTO_INCREMENT,"
+    "  `setting_key` varchar(255) NOT NULL,"
+    "  `setting_value` text,"
+    "  `setting_type` enum('string','integer','float','boolean','json') DEFAULT 'string',"
+    "  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,"
+    "  `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
+    "  PRIMARY KEY (`id`),"
+    "  UNIQUE KEY `setting_key` (`setting_key`)"
+    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
 };
 
 // Function to execute a SQL query and handle errors
@@ -222,7 +234,50 @@ int main(int argc, char *argv[]) {
 
     printf("Admin user created successfully!\n");
 
+// Insert default LDAP settings
+    const char *insert_settings[] = {
+        "INSERT INTO `settings` (`setting_key`, `setting_value`, `setting_type`) VALUES "
+        "('ldap_enabled', '0', 'boolean') ON DUPLICATE KEY UPDATE `setting_value` = VALUES(`setting_value`)",
+        
+        "INSERT INTO `settings` (`setting_key`, `setting_value`, `setting_type`) VALUES "
+        "('ldap_host', 'ldapserver.ad.contoso.co.uk', 'string') ON DUPLICATE KEY UPDATE `setting_value` = VALUES(`setting_value`)",
+        
+        "INSERT INTO `settings` (`setting_key`, `setting_value`, `setting_type`) VALUES "
+        "('ldap_port', '389', 'integer') ON DUPLICATE KEY UPDATE `setting_value` = VALUES(`setting_value`)",
+        
+        "INSERT INTO `settings` (`setting_key`, `setting_value`, `setting_type`) VALUES "
+        "('ldap_base_dn', 'DC=ad,DC=contoso,DC=co,DC=uk', 'string') ON DUPLICATE KEY UPDATE `setting_value` = VALUES(`setting_value`)",
+        
+        "INSERT INTO `settings` (`setting_key`, `setting_value`, `setting_type`) VALUES "
+        "('ldap_user_dn', 'OU=FIN,OU=PS,OU=Accounts,DC=ad,DC=contoso,DC=co,DC=uk', 'string') ON DUPLICATE KEY UPDATE `setting_value` = VALUES(`setting_value`)",
+        
+        "INSERT INTO `settings` (`setting_key`, `setting_value`, `setting_type`) VALUES "
+        "('ldap_use_ssl', '0', 'boolean') ON DUPLICATE KEY UPDATE `setting_value` = VALUES(`setting_value`)",
+        
+        "INSERT INTO `settings` (`setting_key`, `setting_value`, `setting_type`) VALUES "
+        "('ldap_use_tls', '0', 'boolean') ON DUPLICATE KEY UPDATE `setting_value` = VALUES(`setting_value`)",
+        
+        "INSERT INTO `settings` (`setting_key`, `setting_value`, `setting_type`) VALUES "
+        "('ldap_protocol', 'ldap://', 'string') ON DUPLICATE KEY UPDATE `setting_value` = VALUES(`setting_value`)",
+        
+        "INSERT INTO `settings` (`setting_key`, `setting_value`, `setting_type`) VALUES "
+        "('ldap_version', '3', 'integer') ON DUPLICATE KEY UPDATE `setting_value` = VALUES(`setting_value`)",
+        
+        "INSERT INTO `settings` (`setting_key`, `setting_value`, `setting_type`) VALUES "
+        "('ldap_timeout', '5', 'integer') ON DUPLICATE KEY UPDATE `setting_value` = VALUES(`setting_value`)",
+        
+        "INSERT INTO `settings` (`setting_key`, `setting_value`, `setting_type`) VALUES "
+        "('ldap_follow_referrals', '0', 'boolean') ON DUPLICATE KEY UPDATE `setting_value` = VALUES(`setting_value`)"
+    };
 
+    printf("Inserting default LDAP settings...\n");
+    for (i = 0; i < sizeof(insert_settings) / sizeof(insert_settings[0]); i++) {
+        if (execute_query(conn, insert_settings[i])) {
+            fprintf(stderr, "Failed to insert setting %d\n", i + 1);
+            error = 1;
+            break;
+        }
+    }
 
     // Insert the first room record
     const char *insert_room = "INSERT INTO rooms (room_name) VALUES ('...')";
