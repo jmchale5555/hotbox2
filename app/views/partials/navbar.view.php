@@ -89,8 +89,8 @@
             <?php endif; ?> 
             <?php if (isset($_SESSION["USER"]) && $_SESSION["USER"]->is_admin): ?>>
               <li>
-              <a href="<?= ROOT ?>/settings" class="<?php $URL = URL(0);
-                                                if ($URL === "settings")
+              <a href="<?= ROOT ?>/config" class="<?php $URL = URL(0);
+                                                if ($URL === "config")
                                                 {
                                                   echo "md:dark:text-purple-500 ";
                                                 }
