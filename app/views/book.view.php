@@ -226,8 +226,8 @@
         </div>
     </form>
   <template x-if="formData.desk_id !== '...' && formData.desk_id !== ''" >
-    <div class="min-w-max grid grid-cols-3 bg-slate-200 dark:bg-slate-800 rounded-lg">
-    <img :src="selectedImg" class="col-start-2 py-6">
+    <div class="grid grid-cols-3 bg-slate-200 dark:bg-slate-800 rounded-lg">
+    <img :src="selectedImg" class="col-start-2 col-span-2 py-6 object-center w-2/3">
     </div>
   </template>
 
