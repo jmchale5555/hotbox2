@@ -23,4 +23,5 @@ There's a binary which can be run to set up the database called hot_dbinit and I
 10. This will create the database, schema and initial admin user for the system
 11. Now visit your host machine in a web browser and it will be serving the Hot Desk booking system.
 12. Hit Login, there will be an initial admin user set up with username: 'admin' and password: 'pavlova'.  You should log in with this and reset the password from the navbar menu option.
-13. You can now start registering users and adding rooms to the system, setting total number of hotdesks and an optional desk plan image for each room.
+13. As admin, you can configure ldap authentication from the settings menu option.
+14. You can now start registering users and adding rooms to the system, setting total number of hotdesks and an optional desk plan image for each room.
