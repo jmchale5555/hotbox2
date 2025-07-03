@@ -48,4 +48,24 @@ class Booking
 
         return false;
     }
+
+    // advanced query methods for analytics
+
+    public function getBookingStats($startDate, $endDate = null) {
+    $endDate = $endDate ?: time();
+    $query = "SELECT * FROM $this->table WHERE res_date >= :start_date AND res_date <= :end_date";
+    return $this->query($query, ['start_date' => $startDate, 'end_date' => $endDate]);
+    }
+
+    public function getBookingCountByRoom($startDate, $roomId = null) {
+        $query = "SELECT COUNT(*) as count FROM $this->table WHERE res_date >= :start_date";
+        $data = ['start_date' => $startDate];
+        
+        if ($roomId) {
+            $query .= " AND room_id = :room_id";
+            $data['room_id'] = $roomId;
+        }
+        
+        return $this->query($query, $data);
+    }
 }

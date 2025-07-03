@@ -2,7 +2,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="<?= ROOT ?>/assets/css/output.css" rel="stylesheet">
-    <?php include 'navbar.view.php' ?>
+
+<?php include 'navbar.view.php' ?>
 </head>
 
 <body>

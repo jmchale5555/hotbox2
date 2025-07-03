@@ -8,6 +8,7 @@
     },
     "dependencies": {
         "alpinejs": "^3.14.3",
+        "chart.js": "^3.9.1",
         "date-fns": "^4.1.0",
         "flowbite": "^2.5.2"
     }
