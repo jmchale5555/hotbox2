@@ -161,7 +161,7 @@ document.addEventListener('alpine:init', () => {
                         plugins: {
                             legend: {
                                 labels: {
-                                    color: document.documentElement.classList.contains('dark') ? '#391C41' : '#EEF1F4'
+                                color: document.documentElement.classList.contains('dark') ? '#EEF1F4' : '#391C41'
                                 }
                             }
                         },
@@ -169,18 +169,18 @@ document.addEventListener('alpine:init', () => {
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                    color: document.documentElement.classList.contains('dark') ? '#391C41' : '#EEF1F4'
+                                color: document.documentElement.classList.contains('dark') ? '#EEF1F4' : '#391C41'
                                 },
                                 grid: {
-                                    color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb'
+                                color: document.documentElement.classList.contains('dark') ?  '#e5e7eb' : '#374151'
                                 }
                             },
                             x: {
                                 ticks: {
-                                    color: document.documentElement.classList.contains('dark') ? '#391C41' : '#EEF1F4'
+                                color: document.documentElement.classList.contains('dark') ? '#EEF1F4' : '#391C41'
                                 },
                                 grid: {
-                                    color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb'
+                                color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#374151'
                                 }
                             }
                         }
@@ -221,7 +221,7 @@ document.addEventListener('alpine:init', () => {
                                     legend: {
                                         position: 'bottom',
                                         labels: {
-                                            color: document.documentElement.classList.contains('dark') ? '#391C41' : '#EEF1F4'
+                                        color: document.documentElement.classList.contains('dark') ? '#EEF1F4' : '#391C41'
                                         }
                                     }
                                 }
@@ -262,7 +262,7 @@ document.addEventListener('alpine:init', () => {
                                 plugins: {
                                     legend: {
                                         labels: {
-                                            color: document.documentElement.classList.contains('dark') ? '#391C41' : '#EEF1F4'
+                                        color: document.documentElement.classList.contains('dark') ?  '#EEF1F4' : '#391C41'
                                         }
                                     }
                                 },
@@ -270,18 +270,18 @@ document.addEventListener('alpine:init', () => {
                                     y: {
                                         beginAtZero: true,
                                         ticks: {
-                                            color: document.documentElement.classList.contains('dark') ? '#391C41' : '#EEF1F4'
+                                        color: document.documentElement.classList.contains('dark') ? '#EEF1F4' : '#391C41'
                                         },
                                         grid: {
-                                            color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb'
+                                        color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#374151'
                                         }
                                     },
                                     x: {
                                         ticks: {
-                                            color: document.documentElement.classList.contains('dark') ? '#391C41' : '#EEF1F4'
+                                        color: document.documentElement.classList.contains('dark') ? '#EEF1F4' : '#391C41'
                                         },
                                         grid: {
-                                            color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb'
+                                        color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#374151'
                                         }
                                     }
                                 }
@@ -325,23 +325,23 @@ document.addEventListener('alpine:init', () => {
                                 plugins: {
                                     legend: {
                                         labels: {
-                                            color: document.documentElement.classList.contains('dark') ? '#391C41' : '#EEF1F4'
+                                        color: document.documentElement.classList.contains('dark') ? '#EEF1F4' : '#391C41'
                                         }
                                     }
                                 },
                                 scales: {
                                     r: {
                                         angleLines: {
-                                            color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb'
+                                        color: document.documentElement.classList.contains('dark') ?  '#e5e7eb' : '#374151'
                                         },
                                         grid: {
-                                            color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb'
+                                        color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#374151'
                                         },
                                         pointLabels: {
-                                            color: document.documentElement.classList.contains('dark') ? '#391C41' : '#EEF1F4'
+                                        color: document.documentElement.classList.contains('dark') ? '#EEF1F4' : '#391C41'
                                         },
                                         ticks: {
-                                            color: document.documentElement.classList.contains('dark') ? '#391C41' : '#EEF1F4'
+                                        color: document.documentElement.classList.contains('dark') ? '#EEF1F4' : '#391C41'
                                         }
                                     }
                                 }
@@ -389,7 +389,7 @@ document.addEventListener('alpine:init', () => {
                                 plugins: {
                                     legend: {
                                         labels: {
-                                            color: document.documentElement.classList.contains('dark') ? '#391C41' : '#EEF1F4'
+                                        color: document.documentElement.classList.contains('dark') ? '#EEF1F4' : '#391C41'
                                         }
                                     }
                                 },
@@ -398,21 +398,21 @@ document.addEventListener('alpine:init', () => {
                                         beginAtZero: true,
                                         max: 100,
                                         ticks: {
-                                            color: document.documentElement.classList.contains('dark') ? '#391C41' : '#EEF1F4',
+                                        color: document.documentElement.classList.contains('dark') ? '#EEF1F4' : '#391C41',
                                             callback: function(value) {
                                                 return value + '%';
                                             }
                                         },
                                         grid: {
-                                            color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb'
+                                        color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#374151'
                                         }
                                     },
                                     x: {
                                         ticks: {
-                                            color: document.documentElement.classList.contains('dark') ? '#391C41' : '#EEF1F4'
+                                        color: document.documentElement.classList.contains('dark') ? '#EEF1F4' : '#391C41'
                                         },
                                         grid: {
-                                            color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb'
+                                        color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#374151'
                                         }
                                     }
                                 }

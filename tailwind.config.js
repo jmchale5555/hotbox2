@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-    darkMode: 'media',
-    content: ['/var/www/sbox2/app/views/*.view.php', '/var/www/sbox2/app/views/partials/*.view.php', '/var/www/sbox2/public/index.php', '/var/www/sbox2/node_modules/flowbite/**/*.js'],
+    darkMode: 'class',
+    content: ['./app/views/*.view.php', './app/views/partials/*.view.php', './public/index.php', './node_modules/flowbite/**/*.js'],
     theme: {
       extend: {
   
