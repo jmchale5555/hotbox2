@@ -5,4 +5,3 @@ cgi-bin
 html
 node_modules
 app/core/config.php
-public/assets/uploads/rooms/*
