@@ -11,14 +11,14 @@ There's a binary which can be run to set up the database called hot_dbinit and I
 ## Hotdesk Booking System Quick Start Guide
 
 1. Clone repository.
-2. Install Node js and run the following command from project root: `npm install`
+2. Make sure you have Node.js installed and run the following command from project root: `npm install`
 3. Copy config.php.example from project root folder to app/core and rename config.php. \
         ```
                 cp config.example.php app/core/config.php
         ```
 4. Edit config.php, leave the DBNAME as hot.  If using docker the DBHOST is mariadb and initial MySql password is 'rootpassword'. Set ROOT URL to your machine's name or http://localhost.
 5. For production you'll need to set different MySql DB user and password by using a docker exec command and turn debug mode off in this file, but defaults are good for trialing.
-6. Make sure you have Docker Engine and Docker Compose installed.  Docker Desktop will give you those plus a load of other stuff. 
+6. Make sure you have Docker Engine and Docker Compose installed.
 7. From the root of the repo: `sudo docker compose up --build -d`
 8. Once docker compose has finished building containers, type the following command:
 9. `sudo docker exec -it $(docker ps | grep mariadb | cut -c1-12) /usr/local/bin/db-init`
