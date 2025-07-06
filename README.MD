@@ -32,5 +32,5 @@ You could set up the following alias in .bashrc:
 
 alias tailwatch='npx tailwindcss -i ./public/assets/css/input.css -o ./public/assets/css/output.css --watch'
 
-Then run the comman `tailwatch` from the root directory of the project.
+Then run the comman `tailwatch` from the root directory of the project.  Now when you use new tailwind classes the main css will be recompiled automatically.
 
