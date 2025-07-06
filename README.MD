@@ -23,3 +23,14 @@ There's a binary which can be run to set up the database called hot_dbinit and I
 11. Hit Login, there will be an initial admin user set up with username: 'admin' and password: 'pavlova'.  You should log in with this and reset the password from the navbar menu option.
 12. To enable Active Directory / LDAP authentication, admin users can go to the "System Settings" menu item and enter your ldap connection details.
 13. You can now start registering users and adding rooms to the system, setting total number of hotdesks and an optional desk plan image for each room.
+
+## Developers
+
+To work on the site you'll need to run a Tailwind watcher from the project root in a terminal window.
+
+You could set up the following alias in .bashrc:
+
+alias tailwatch='npx tailwindcss -i ./public/assets/css/input.css -o ./public/assets/css/output.css --watch'
+
+Then run the comman `tailwatch` from the root directory of the project.
+
