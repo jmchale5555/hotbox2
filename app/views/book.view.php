@@ -322,15 +322,19 @@
 
                     const result = await response.json();
 
-                    if (!response.ok) {
-                        if (result.errors) {
-                            this.errors = result.errors;
-                        }
+                    // Check if there are any errors returned
+                    if (result && Object.keys(result).length > 0) {
+                        this.errors = result;
                         this.hasError = true;
-                        this.message = result.message || 'An error occurred';
+                        
+                        // Display the specific error message
+                        if (result.res_date) {
+                            this.message = result.res_date;
+                        } else {
+                            this.message = 'Please check the form for errors';
+                        }
                         return;
                     }
-
                     // Use the room_id from formData to fetch updated bookings
                     if (this.formData.room_id) {
                         this.$dispatch('refresh-room-data', {

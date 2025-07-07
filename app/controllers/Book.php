@@ -93,7 +93,25 @@ class Book
         $data['user_id'] = $_SESSION['USER']->id;
         $data['user_name'] = $_SESSION['USER']->name;
 
-        // use the validate and insert method to do wot it sez ont tin
+        // Check if user already has a booking on this date (across all rooms)
+        $existingBookings = $booking->where([
+            'user_id' => $_SESSION['USER']->id,
+            'res_date' => $data['res_date']
+        ], [], []);
+
+        if (!empty($existingBookings)) {
+            // User already has a booking on this date - get room details
+            $existingBooking = $existingBookings[0]; // Get the first booking
+            $rooms = new Room;
+            $room = $rooms->where(['id' => $existingBooking->room_id], [], []);
+            $roomName = !empty($room) ? $room[0]->room_name : 'Unknown Room';
+  
+            $booking->errors['res_date'] = "You already have a desk booked on this date: {$roomName} - Desk {$existingBooking->desk_id}";
+            echo json_encode($booking->errors);
+            return;
+        }
+
+        // validate and insert
         if ($booking->validate($data))
         {
             $booking->insert($data);
